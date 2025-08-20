@@ -18,4 +18,10 @@ public abstract class BotConstants {
 
     public static final String INCOMPLETE_SYMBOL = "[ ]";
 
+    public static final String TODO_TASK_TYPE = "[T]";
+
+    public static final String DEADLINE_TASK_TYPE = "[D]";
+
+    public static final String EVENT_TASK_TYPE = "[E]";
+
 }

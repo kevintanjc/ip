@@ -1,12 +1,14 @@
 package resources.util;
 
+import static resources.util.BotConstants.EVENT_TASK_TYPE;
+
 public class EventTask extends Task {
 
     private String startDate;
 
     private String endDate;
 
-    private static final String TASK_TYPE = "[E]";
+    private static final String TASK_TYPE = EVENT_TASK_TYPE;
 
     public EventTask(String description, String startDate, String endDate) {
         super(description);

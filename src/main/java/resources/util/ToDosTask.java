@@ -1,8 +1,10 @@
 package resources.util;
 
+import static resources.util.BotConstants.TODO_TASK_TYPE;
+
 public class ToDosTask extends Task {
 
-    private static final String TASK_TYPE = "[T]";
+    private static final String TASK_TYPE = TODO_TASK_TYPE;
 
     public ToDosTask(String description) {
         super(description);
