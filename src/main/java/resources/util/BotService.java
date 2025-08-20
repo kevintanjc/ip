@@ -133,7 +133,7 @@ public class BotService {
     }
 
     private void endBotService() {
-        System.out.println("See you next time!\n" + LINE_SEPARATOR + "\n");
+        System.out.println("See you next time!\n" + LINE_SEPARATOR);
     }
 
     public BotService() {
