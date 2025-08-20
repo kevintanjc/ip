@@ -1,7 +1,26 @@
-Hello from
- ____        _        
-|  _ \ _   _| | _____ 
-| | | | | | | |/ / _ \
-| |_| | |_| |   <  __/
-|____/ \__,_|_|\_\___|
+_________________________________________
+Hello! I'm JavaBot
+What can I do for you?
 
+    Thanks for letting me know! I have added:
+    [T][ ] read book
+    Thanks for letting me know! I have added:
+    [T][ ] read article
+    Thanks for letting me know! I have added:
+    [D][ ] A (by: 2023-10-01)
+    Thanks for letting me know! I have added:
+    [D][ ] B (by: 2023-10-02)
+    Thanks for letting me know! I have added:
+    [E][ ] C (from: 2023-10-03 to: 2023-10-04)
+    Thanks for letting me know! I have added:
+    [E][ ] D (from: 2023-10-05 to: 2023-10-06)
+    Certainly! Here are your inputs thus far:
+    1. [T][ ] read book
+    2. [T][ ] read article
+    3. [D][ ] A (by: 2023-10-01)
+    4. [D][ ] B (by: 2023-10-02)
+    5. [E][ ] C (from: 2023-10-03 to: 2023-10-04)
+    6. [E][ ] D (from: 2023-10-05 to: 2023-10-06)
+    You currently have 6 items in your list!
+See you next time!
+_________________________________________

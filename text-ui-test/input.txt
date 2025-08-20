@@ -1,0 +1,8 @@
+todo read book
+todo read article
+deadline A /by 2023-10-01
+deadline B /by 2023-10-02
+event C /from 2023-10-03 /to 2023-10-04
+event D /from 2023-10-05 /to 2023-10-06
+list
+bye
