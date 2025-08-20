@@ -16,10 +16,6 @@ public abstract class BotConstants {
 
     public static final String DELETE_COMMAND = "delete";
 
-    public static final String COMPLETED_SYMBOL = "[X]";
-
-    public static final String INCOMPLETE_SYMBOL = "[ ]";
-
     public static final String TODO_TASK_TYPE = "[T]";
 
     public static final String DEADLINE_TASK_TYPE = "[D]";
@@ -34,4 +30,19 @@ public abstract class BotConstants {
 
     public static final String NO_DATE_GIVEN = "I DUNNO >.<";
 
+    public enum Symbol {
+        COMPLETED("[X]"),
+        INCOMPLETE("[ ]");
+
+        private final String symbol;
+
+        Symbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public String toString() {
+            return symbol;
+        }
+    }
 }

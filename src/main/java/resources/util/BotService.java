@@ -26,18 +26,26 @@ public class BotService {
             } else if (command.equals(LIST_COMMAND)) {
                 listTasks();
             } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
-                Integer index = Integer.parseInt(input.substring(5)) - 1;
-                if (index < input.length()) {
-                    markTask(index);
-                } else {
-                    System.out.println(INDENT + "Please provide a valid task number to mark.");
+                try {
+                    Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
+                    if (index < input.length()) {
+                        markTask(index);
+                    } else {
+                        System.out.println(INDENT + "Please provide a valid task number to mark.");
+                    }
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
                 }
             } else if (input.length() >= 8 && command.equals(UNMARK_COMMAND)) {
-                Integer index = Integer.parseInt(input.substring(7)) - 1;
-                if (index < input.length()) {
-                    unmarkTask(index);
-                } else {
-                    System.out.println(INDENT + "Please provide a valid task number to unmark.");
+                try {
+                    Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
+                    if (index < input.length()) {
+                        unmarkTask(index);
+                    } else {
+                        System.out.println(INDENT + "Please provide a valid task number to unmark.");
+                    }
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
                 }
             } else if (command.equals(DELETE_COMMAND)) {
                 deleteTaskFromChecklist(Integer.parseInt(input.split(" ")[1]) - 1);
@@ -68,7 +76,7 @@ public class BotService {
         } else {
             task.setCompleted();
             System.out.println(INDENT + "Well done! I'll mark it as done for you.\n" + INDENT
-                    + COMPLETED_SYMBOL + " " + task.getDescription());
+                    + task);
         }
     }
 
@@ -78,8 +86,8 @@ public class BotService {
             System.out.println(INDENT + "The following task has already been marked as not done: " + task.getDescription());
         } else {
             task.setCompleted();
-            System.out.println(INDENT + "Okay! I'll mark it as not done for you.\n" + INDENT + INCOMPLETE_SYMBOL
-                    + " " + task.getDescription());
+            System.out.println(INDENT + "Okay! I'll mark it as not done for you.\n" + INDENT
+                    + task);
         }
     }
 

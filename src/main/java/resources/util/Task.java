@@ -23,7 +23,7 @@ public class Task {
     }
 
     public String toString() {
-        String symbol = completed ? BotConstants.COMPLETED_SYMBOL : BotConstants.INCOMPLETE_SYMBOL;
+        String symbol = completed ? BotConstants.Symbol.COMPLETED.toString() : BotConstants.Symbol.INCOMPLETE.toString();
         return String.format("%s %s", symbol, description);
     }
 }
