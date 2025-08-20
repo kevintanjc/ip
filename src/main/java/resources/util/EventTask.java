@@ -18,6 +18,6 @@ public class EventTask extends Task {
 
     @Override
     public String toString() {
-        return String.format("%s%s (from: %s to %s)", TASK_TYPE, super.toString(), startDate, endDate);
+        return String.format("%s%s (from: %s to: %s)", TASK_TYPE, super.toString(), startDate, endDate);
     }
 }
