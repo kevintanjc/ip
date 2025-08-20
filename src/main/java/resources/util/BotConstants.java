@@ -24,4 +24,12 @@ public abstract class BotConstants {
 
     public static final String EVENT_TASK_TYPE = "[E]";
 
+    public static final String TODO_TASK_DESCRIPTION = "todo";
+
+    public static final String DEADLINE_TASK_DESCRIPTION = "deadline";
+
+    public static final String EVENT_TASK_DESCRIPTION = "event";
+
+    public static final String NO_DATE_GIVEN = "I DUNNO >.<";
+
 }
