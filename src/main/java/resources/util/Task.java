@@ -21,4 +21,9 @@ public class Task {
     public void setCompleted() {
         completed = !completed;
     }
+
+    public String toString() {
+        String symbol = completed ? BotConstants.COMPLETED_SYMBOL : BotConstants.INCOMPLETE_SYMBOL;
+        return String.format("%s %s", symbol, description);
+    }
 }
