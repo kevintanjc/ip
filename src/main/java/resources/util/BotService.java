@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.util.Objects.isNull;
 import static resources.util.BotConstants.*;
 
 public class BotService {
@@ -47,6 +48,9 @@ public class BotService {
     }
 
     private void listTasks() {
+        if (checklist.isEmpty()) {
+            System.out.println(INDENT + "Uh oh...You currently have no tasks in your list! Add some tasks to get started!");
+        }
         System.out.println(INDENT + "Certainly! Here are your inputs thus far:");
         for (int i = 0; i < checklist.size(); i++) {
             System.out.println(INDENT + (i + 1) + ". " + checklist.get(i).toString());
@@ -91,37 +95,64 @@ public class BotService {
         return -1;
     }
 
-    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, List<Task> checklist) throws IllegalStateException {
+    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, List<Task> checklist) throws IllegalStateException, NullPointerException {
         if (taskFlag == -1) {
-            System.out.println(INDENT + "I'm sorry, I don't understand that command.");
+            throw new IllegalStateException("Invalid task type! Please use 'todo', 'deadline', or 'event'.");
         }
 
         Task tasking = null;
 
         switch(taskFlag) {
             case 1: // To-Do task
-                tasking = new ToDosTask(inputString.substring(5));
+                String description = inputString.substring(5);
+                if (description.isEmpty()) {
+                    throw new IllegalStateException("To-Do task description cannot be empty!");
+                }
+                tasking = new ToDosTask(description);
                 break;
+
             case 2: // Deadline task
                 String[] parts = inputString.substring(9).split(" /by ");
-                if (parts.length < 2) {
+                for (String str : parts) {
+                    if (str.contains("/by")) {
+                        throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+                    }
+                }
+                if (parts.length == 0) {
+                    throw new IllegalStateException("Deadline task description cannot be empty!");
+                } else if (parts.length == 1) {
                     tasking = new DeadlineTask(parts[0], NO_DATE_GIVEN);
-                } else {
+                } else if (parts.length == 2) {
                     tasking = new DeadlineTask(parts[0], parts[1]);
+                } else {
+                    throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
                 }
                 break;
+
             case 3: // Event task
                 String[] eventParts = inputString.substring(6).split(" /from | /to ");
-                if (eventParts.length < 2) {
+                for (String str : eventParts) {
+                    if (str.contains("/from") || eventParts[0].contains("/to")) {
+                        throw new IllegalStateException("Invalid format for Event task! Use 'event <description> /from <start date> /to <end date>'.");
+                    }
+                }
+                if (eventParts.length == 0) {
+                    throw new IllegalStateException("Event task description cannot be empty!");
+                } else if (eventParts.length == 1) {
                     tasking = new EventTask(eventParts[0].trim(), NO_DATE_GIVEN, NO_DATE_GIVEN);
-                } else if (eventParts.length < 3) {
+                } else if (eventParts.length == 2) {
                     tasking = new EventTask(eventParts[0].trim(), eventParts[1], NO_DATE_GIVEN);
-                } else {
+                } else if (eventParts.length == 3) {
                     tasking = new EventTask(eventParts[0].trim(), eventParts[1], eventParts[2]);
+                } else {
+                    throw new IllegalStateException("Invalid format for Event task! Use 'event <description> /from <start date> /to <end date>'.");
                 }
                 break;
         }
 
+        if (isNull(tasking)) {
+            throw new NullPointerException("Task creation failed! Please check your input.");
+        }
         checklist.add(tasking);
         System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
                 + INDENT + tasking.toString());
