@@ -14,6 +14,8 @@ public abstract class BotConstants {
 
     public static final String UNMARK_COMMAND = "unmark";
 
+    public static final String DELETE_COMMAND = "delete";
+
     public static final String COMPLETED_SYMBOL = "[X]";
 
     public static final String INCOMPLETE_SYMBOL = "[ ]";

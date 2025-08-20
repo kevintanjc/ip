@@ -12,32 +12,35 @@ public class BotService {
     private Scanner scanner;
     private List<Task> checklist;
 
-    public void executeService() {
+    public void executeService() throws IllegalStateException, NullPointerException, IndexOutOfBoundsException {
         scanner = new Scanner(System.in);
         checklist = new ArrayList<>();
 
         while (true) {
             String input = scanner.nextLine();
+            String command = input.split(" ")[0];
             int taskType = getTask(input.split(" ")[0]);
 
-            if (input.equals(EXIT_COMMAND)) {
+            if (command.equals(EXIT_COMMAND)) {
                 break;
-            } else if (input.equals(LIST_COMMAND)) {
+            } else if (command.equals(LIST_COMMAND)) {
                 listTasks();
-            } else if (input.length() >= 6 && input.substring(0, 4).equals(MARK_COMMAND)) {
+            } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
                 Integer index = Integer.parseInt(input.substring(5)) - 1;
                 if (index < input.length()) {
                     markTask(index);
                 } else {
                     System.out.println(INDENT + "Please provide a valid task number to mark.");
                 }
-            } else if (input.length() >= 8 && input.substring(0, 6).equals(UNMARK_COMMAND)) {
+            } else if (input.length() >= 8 && command.equals(UNMARK_COMMAND)) {
                 Integer index = Integer.parseInt(input.substring(7)) - 1;
                 if (index < input.length()) {
                     unmarkTask(index);
                 } else {
                     System.out.println(INDENT + "Please provide a valid task number to unmark.");
                 }
+            } else if (command.equals(DELETE_COMMAND)) {
+                deleteTaskFromChecklist(Integer.parseInt(input.split(" ")[1]) - 1);
             } else {
                 insertTaskIntoChecklist(taskType, input, checklist);
             }
@@ -158,6 +161,14 @@ public class BotService {
                 + INDENT + tasking.toString());
     }
 
+    private void deleteTaskFromChecklist(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= checklist.size()) {
+            throw new IndexOutOfBoundsException("Invalid task number! Please provide a valid task number to delete.");
+        }
+        Task removedTask = checklist.remove(index);
+        System.out.println(INDENT + "Roger. The following task is removed:\n"
+                + INDENT + removedTask.toString() + "\n" + INDENT + "You now have " + checklist.size() + " tasks in your list.");
+    }
 
     private void startBotService() {
         System.out.println(LINE_SEPARATOR + "\n" + "Hello! I'm JavaBot\n" + "What can I do for you?\n");
