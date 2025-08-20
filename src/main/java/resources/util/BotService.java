@@ -17,6 +17,8 @@ public class BotService {
 
         while (true) {
             String input = scanner.nextLine();
+            int taskType = getTask(input.split(" ")[0]);
+
             if (input.equals(EXIT_COMMAND)) {
                 break;
             } else if (input.equals(LIST_COMMAND)) {
@@ -36,9 +38,7 @@ public class BotService {
                     System.out.println(INDENT + "Please provide a valid task number to unmark.");
                 }
             } else {
-                Task tasking = new Task(input);
-                checklist.add(tasking);
-                System.out.println(INDENT + "Added: " + tasking.getDescription());
+                insertTaskIntoChecklist(taskType, input, checklist);
             }
         }
 
@@ -47,14 +47,11 @@ public class BotService {
     }
 
     private void listTasks() {
-        System.out.println("Certainly! Here are your inputs thusfar:\n");
+        System.out.println(INDENT + "Certainly! Here are your inputs thus far:");
         for (int i = 0; i < checklist.size(); i++) {
-            if (checklist.get(i).isCompleted()) {
-                System.out.println(INDENT + (i + 1) + ". [X] " + checklist.get(i).getDescription());
-            } else {
-                System.out.println(INDENT + (i + 1) + ". [ ] " + checklist.get(i).getDescription());
-            }
+            System.out.println(INDENT + (i + 1) + ". " + checklist.get(i).toString());
         }
+        System.out.printf(INDENT + "You currently have %d items in your list!%n", checklist.size());
     }
 
     private void markTask(int index) {
@@ -79,6 +76,56 @@ public class BotService {
         }
     }
 
+    private Integer getTask(String str) {
+        if (str.length() >= 4) {
+            if (str.equals(TODO_TASK_DESCRIPTION)) {
+                return 1;
+            } else if (str.equals(DEADLINE_TASK_DESCRIPTION)) {
+                return 2;
+            } else if (str.equals(EVENT_TASK_DESCRIPTION)) {
+                return 3;
+            } else {
+                return -1;
+            }
+        }
+        return -1;
+    }
+
+    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, List<Task> checklist) throws IllegalStateException {
+        if (taskFlag == -1) {
+            System.out.println(INDENT + "I'm sorry, I don't understand that command.");
+        }
+
+        Task tasking = null;
+
+        switch(taskFlag) {
+            case 1: // To-Do task
+                tasking = new ToDosTask(inputString.substring(5));
+                break;
+            case 2: // Deadline task
+                String[] parts = inputString.substring(9).split(" /by ");
+                if (parts.length < 2) {
+                    tasking = new DeadlineTask(parts[0], NO_DATE_GIVEN);
+                } else {
+                    tasking = new DeadlineTask(parts[0], parts[1]);
+                }
+                break;
+            case 3: // Event task
+                String[] eventParts = inputString.substring(6).split(" /from | /to ");
+                if (eventParts.length < 2) {
+                    tasking = new EventTask(eventParts[0].trim(), NO_DATE_GIVEN, NO_DATE_GIVEN);
+                } else if (eventParts.length < 3) {
+                    tasking = new EventTask(eventParts[0].trim(), eventParts[1], NO_DATE_GIVEN);
+                } else {
+                    tasking = new EventTask(eventParts[0].trim(), eventParts[1], eventParts[2]);
+                }
+                break;
+        }
+
+        checklist.add(tasking);
+        System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
+                + INDENT + tasking.toString());
+    }
 
 
     private void startBotService() {
