@@ -1,11 +1,13 @@
 package resources.util.services;
 
+import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
 import resources.util.tasks.Task;
 import resources.util.tasks.ToDosTask;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,7 +29,8 @@ public class BotService extends Service {
     private Scanner scanner;
     private List<Task> checklist;
 
-    protected void executeService() throws IllegalStateException, NullPointerException, IndexOutOfBoundsException, IOException {
+    protected void executeService() throws IllegalStateException, NullPointerException,
+            IndexOutOfBoundsException, IOException {
         scanner = new Scanner(System.in);
 
         while (true) {
@@ -121,7 +124,8 @@ public class BotService extends Service {
         return -1;
     }
 
-    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, List<Task> checklist) throws IllegalStateException, NullPointerException {
+    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, List<Task> checklist)
+            throws IllegalStateException, NullPointerException {
         if (taskFlag == -1) {
             throw new IllegalStateException("Invalid task type! Please use 'todo', 'deadline', or 'event'.");
         }
@@ -130,49 +134,15 @@ public class BotService extends Service {
 
         switch(taskFlag) {
         case 1: // To-Do task
-            String description = inputString.substring(5);
-            if (description.isEmpty()) {
-                throw new IllegalStateException("To-Do task description cannot be empty!");
-            }
-            tasking = new ToDosTask(description);
+            tasking = initializeToDoTask(inputString);
             break;
 
         case 2: // Deadline task
-            String[] parts = inputString.substring(9).split(" /by ");
-            for (String str : parts) {
-                if (str.contains("/by")) {
-                    throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
-                }
-            }
-            if (parts.length == 0) {
-                throw new IllegalStateException("Deadline task description cannot be empty!");
-            } else if (parts.length == 1) {
-                tasking = new DeadlineTask(parts[0], NO_DATE_GIVEN);
-            } else if (parts.length == 2) {
-                tasking = new DeadlineTask(parts[0], parts[1]);
-            } else {
-                throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
-            }
+            tasking = initializeDeadlineTask(inputString);
             break;
 
         case 3: // Event task
-            String[] eventParts = inputString.substring(6).split(" /from | /to ");
-            for (String str : eventParts) {
-                if (str.contains("/from") || eventParts[0].contains("/to")) {
-                    throw new IllegalStateException("Invalid format for Event task! Use 'event <description> /from <start date> /to <end date>'.");
-                }
-            }
-            if (eventParts.length == 0) {
-                throw new IllegalStateException("Event task description cannot be empty!");
-            } else if (eventParts.length == 1) {
-                tasking = new EventTask(eventParts[0].trim(), NO_DATE_GIVEN, NO_DATE_GIVEN);
-            } else if (eventParts.length == 2) {
-                tasking = new EventTask(eventParts[0].trim(), eventParts[1], NO_DATE_GIVEN);
-            } else if (eventParts.length == 3) {
-                tasking = new EventTask(eventParts[0].trim(), eventParts[1], eventParts[2]);
-            } else {
-                throw new IllegalStateException("Invalid format for Event task! Use 'event <description> /from <start date> /to <end date>'.");
-            }
+            tasking = initializeEventTask(inputString);
             break;
         }
 
@@ -191,6 +161,56 @@ public class BotService extends Service {
         Task removedTask = checklist.remove(index);
         System.out.println(INDENT + "Roger. The following task is removed:\n"
                 + INDENT + removedTask.toString() + "\n" + INDENT + "You now have " + checklist.size() + " tasks in your list.");
+    }
+
+    private ToDosTask initializeToDoTask(String inputStr) throws IllegalStateException {
+        String description = inputStr.substring(5);
+        if (description.isEmpty()) {
+            throw new IllegalStateException("To-Do task description cannot be empty!");
+        }
+        return new ToDosTask(description);
+    }
+
+    private DeadlineTask initializeDeadlineTask(String inputStr) throws IllegalStateException, DateTimeParseException {
+        String[] parts = inputStr.substring(9).split(" /by ");
+        for (String str : parts) {
+            if (str.contains("/by")) {
+                throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+            }
+        }
+        if (parts.length == 0) {
+            throw new IllegalStateException("Deadline task description cannot be empty!");
+        } else if (parts.length == 1) {
+            return new DeadlineTask(parts[0], null);
+        } else if (parts.length == 2) {
+            return new DeadlineTask(parts[0], DateTimeUtil.convertStringToLocalDate(parts[1]));
+        } else {
+            throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+        }
+    }
+
+    private EventTask initializeEventTask(String inputStr) throws IllegalStateException, DateTimeParseException {
+        String[] eventParts = inputStr.substring(6).split(" /from | /to ");
+        for (String str : eventParts) {
+            if (str.contains("/from") || eventParts[0].contains("/to")) {
+                throw new IllegalStateException("Invalid format for Event task!"
+                        + "Use 'event <description> /from <start date> /to <end date>'.");
+            }
+        }
+        if (eventParts.length == 0) {
+            throw new IllegalStateException("Event task description cannot be empty!");
+        } else if (eventParts.length == 1) {
+            return new EventTask(eventParts[0].trim(), null, null);
+        } else if (eventParts.length == 2) {
+            return new EventTask(eventParts[0].trim(), DateTimeUtil.convertStringToLocalDate(eventParts[1]), null);
+        } else if (eventParts.length == 3) {
+            return new EventTask(eventParts[0].trim(),
+                    DateTimeUtil.convertStringToLocalDate(eventParts[1]),
+                    DateTimeUtil.convertStringToLocalDate(eventParts[2]));
+        } else {
+            throw new IllegalStateException("Invalid format for Event task! Use 'event <description>"
+                    + "/from <start date> /to <end date>'.");
+        }
     }
 
     @Override
