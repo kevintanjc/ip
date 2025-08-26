@@ -1,9 +1,12 @@
-import resources.util.BotService;
+import resources.util.services.BotService;
 
 public class JavaBot {
     public static void main(String[] args) {
-        BotService botService = new BotService();
-        botService.executeService();
+        try {
+            new BotService();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
 }

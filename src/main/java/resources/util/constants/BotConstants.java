@@ -1,4 +1,4 @@
-package resources.util;
+package resources.util.constants;
 
 public abstract class BotConstants {
 
@@ -29,6 +29,8 @@ public abstract class BotConstants {
     public static final String EVENT_TASK_DESCRIPTION = "event";
 
     public static final String NO_DATE_GIVEN = "I DUNNO >.<";
+
+    public static final String FILE_PATH = "src/data/checklist.txt";
 
     public enum Symbol {
         COMPLETED("[X]"),

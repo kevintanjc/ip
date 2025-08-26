@@ -1,4 +1,6 @@
-package resources.util;
+package resources.util.tasks;
+
+import resources.util.constants.BotConstants;
 
 public class Task {
 
