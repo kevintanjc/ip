@@ -1,5 +1,15 @@
 package resources.util.constants;
 
+/**
+ * Contains constant values used throughout the bot application.
+ * <p>
+ * The {@code BotConstants} class provides a centralized location for defining
+ * constant values such as command keywords, file paths, and formatting strings.
+ * This helps maintain consistency and makes it easier to manage these values
+ * across the application.
+ *
+ * @author Kevin Tan
+ */
 public abstract class BotConstants {
 
     public static final String LINE_SEPARATOR = "_________________________________________";
