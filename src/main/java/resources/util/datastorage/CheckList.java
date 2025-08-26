@@ -10,11 +10,10 @@ import static resources.util.constants.BotConstants.INDENT;
 /**
  * Represents a checklist that manages a list of tasks.
  * <p>
- * The {@link Checklist} class provides methods to handle and manipulate a list of {@link Task} objects.
+ * The {@link CheckList} class provides methods to handle and manipulate a list of {@link Task} objects.
  *
  * @author Kevin Tan
  */
-public class Checklist {
 public class CheckList {
 
     private List<Task> checkList;
