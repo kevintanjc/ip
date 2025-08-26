@@ -1,5 +1,6 @@
 package resources.util.services;
 
+import resources.util.datastorage.Checklist;
 import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,15 +21,15 @@ import static resources.util.constants.BotConstants.FILE_PATH;
 public class LoadingService extends Service {
 
     private Scanner scanner;
-    private List<Task> checklist;
+    private Checklist checklist;
 
     @Override
     protected void executeService() throws IOException {
-        checklist = new ArrayList<>();
+        checklist = new Checklist();
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.startsWith("[")) {
-                checklist.add(parseLineToTask(line));
+                checklist.addTask(parseLineToTask(line));
             }
         }
 
@@ -47,7 +48,9 @@ public class LoadingService extends Service {
     }
 
     @Override
-    protected void endService() {}
+    protected void endService() {
+        scanner.close();
+    }
 
     private Task parseLineToTask(String line) throws IllegalArgumentException {
         String taskType = line.substring(0, 3);
@@ -63,10 +66,10 @@ public class LoadingService extends Service {
     }
 
     private EventTask createEventTask(String line) {
-        String[] parts = line.split("(?<!\\[)\\s+(?!\\])");
-        String description = parts[1];
-        String startDate = parts[3];
-        String endDate = formatDate(parts[5]);
+        String[] parts = line.split(" \\(from: | to: |\\)");
+        String description = parts[0].substring(7);
+        String startDate = parts[1];
+        String endDate = formatDate(parts[2]);
         boolean completed = checkCompletedTask(parts[0].substring(3));
         EventTask output = new EventTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(startDate),
                 DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
@@ -88,9 +91,9 @@ public class LoadingService extends Service {
     }
 
     private Task createDeadlineTask(String line) {
-        String[] parts = line.split("(?<!\\[)\\s+(?!\\])");
-        String description = parts[1];
-        String endDate = formatDate(parts[3]);
+        String[] parts = line.split(" \\(by: ");
+        String description = parts[0].substring(7);
+        String endDate = formatDate(parts[1]);
         boolean completed = checkCompletedTask(parts[0].substring(3));
         DeadlineTask output = new DeadlineTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
         if (completed) {
@@ -107,7 +110,7 @@ public class LoadingService extends Service {
         return date.replaceAll("[()]", "");
     }
 
-    public List<Task> getChecklist() {
+    public Checklist getChecklist() {
         return checklist;
     }
 
