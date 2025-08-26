@@ -7,7 +7,9 @@ import resources.util.tasks.ToDosTask;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,7 +36,7 @@ public class LoadingService extends Service {
             System.out.println("There are no tasks in your checklist.");
         } else {
             System.out.println("Tasks have been loaded successfully\n" + "type 'list' to view your tasks.");
-            }
+        }
     }
 
 
@@ -109,7 +111,11 @@ public class LoadingService extends Service {
     }
 
     public LoadingService() throws IOException {
-        scanner = new Scanner(Files.newBufferedReader(Paths.get(FILE_PATH)));
+        Path filePath = Paths.get(FILE_PATH);
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
+        }
+        scanner = new Scanner(Files.newBufferedReader(filePath));
         startService();
     }
 }
