@@ -1,6 +1,6 @@
 package resources.util.services;
 
-import resources.util.datastorage.Checklist;
+import resources.util.datastorage.CheckList;
 import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
@@ -24,7 +24,7 @@ import static resources.util.constants.BotConstants.UNMARK_COMMAND;
 public class BotService extends Service {
 
     private Scanner scanner;
-    private Checklist checklist;
+    private CheckList checkList;
 
     protected void executeService() throws IllegalStateException, NullPointerException,
             IndexOutOfBoundsException, IOException {
@@ -38,12 +38,12 @@ public class BotService extends Service {
             if (command.equals(EXIT_COMMAND)) {
                 break;
             } else if (command.equals(LIST_COMMAND)) {
-                checklist.printTasks();
+                checkList.printTasks();
             } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
                 try {
                     Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (index < input.length()) {
-                        checklist.markTask(index);
+                        checkList.markTask(index);
                     } else {
                         System.out.println(INDENT + "Please provide a valid task number to mark.");
                     }
@@ -54,7 +54,7 @@ public class BotService extends Service {
                 try {
                     Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (index < input.length()) {
-                        checklist.unmarkTask(index);
+                        checkList.unmarkTask(index);
                     } else {
                         System.out.println(INDENT + "Please provide a valid task number to unmark.");
                     }
@@ -62,15 +62,15 @@ public class BotService extends Service {
                     throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
                 }
             } else if (command.equals(DELETE_COMMAND)) {
-                checklist.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
+                checkList.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
             } else {
-                insertTaskIntoChecklist(taskType, input, checklist);
+                insertTaskIntoChecklist(taskType, input, checkList);
             }
         }
 
         scanner.close();
         endService();
-        new SavingService(checklist);
+        new SavingService(checkList);
     }
 
     private Integer getTask(String str) {
@@ -88,7 +88,7 @@ public class BotService extends Service {
         return -1;
     }
 
-    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, Checklist checklist)
+    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, CheckList checklist)
             throws IllegalStateException, NullPointerException {
         if (taskFlag == -1) {
             throw new IllegalStateException("Invalid task type! Please use 'todo', 'deadline', or 'event'.");
@@ -119,7 +119,8 @@ public class BotService extends Service {
         String[] parts = inputStr.substring(9).split(" /by ");
         for (String str : parts) {
             if (str.contains("/by")) {
-                throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+                throw new IllegalStateException("Invalid format for Deadline task!"
+                        + "Use 'deadline <description> /by <date>'.");
             }
         }
         if (parts.length == 0) {
@@ -127,15 +128,16 @@ public class BotService extends Service {
         } else if (parts.length == 1) {
             DeadlineTask task = new DeadlineTask(parts[0], null);
             System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                    + INDENT + task.toString());
+                    + INDENT + task);
             return task;
         } else if (parts.length == 2) {
             DeadlineTask task = new DeadlineTask(parts[0], DateTimeUtil.convertStringToLocalDate(parts[1]));
             System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                    + INDENT + task.toString());
+                    + INDENT + task);
             return task;
         } else {
-            throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+            throw new IllegalStateException("Invalid format for Deadline task!"
+                    + "Use 'deadline <description> /by <date>'.");
         }
     }
 
@@ -152,7 +154,8 @@ public class BotService extends Service {
         } else if (eventParts.length == 1) {
             return new EventTask(eventParts[0].trim(), null, null);
         } else if (eventParts.length == 2) {
-            return new EventTask(eventParts[0].trim(), DateTimeUtil.convertStringToLocalDate(eventParts[1]), null);
+            return new EventTask(eventParts[0].trim(), DateTimeUtil.convertStringToLocalDate(eventParts[1]),
+                    null);
         } else if (eventParts.length == 3) {
             return new EventTask(eventParts[0].trim(),
                     DateTimeUtil.convertStringToLocalDate(eventParts[1]),
@@ -166,7 +169,7 @@ public class BotService extends Service {
     @Override
     protected void startService() throws IOException {
         LoadingService load = new LoadingService();
-        this.checklist = load.getChecklist();
+        this.checkList = load.getChecklist();
         System.out.println(LINE_SEPARATOR + "\n" + "Hello! I'm JavaBot\n" + "What can I do for you?\n");
         executeService();
     }

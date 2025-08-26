@@ -1,6 +1,6 @@
 package resources.util.services;
 
-import resources.util.datastorage.Checklist;
+import resources.util.datastorage.CheckList;
 import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import static resources.util.constants.BotConstants.EVENT_TASK_TYPE;
@@ -21,11 +19,11 @@ import static resources.util.constants.BotConstants.FILE_PATH;
 public class LoadingService extends Service {
 
     private Scanner scanner;
-    private Checklist checklist;
+    private CheckList checklist;
 
     @Override
     protected void executeService() throws IOException {
-        checklist = new Checklist();
+        checklist = new CheckList();
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.startsWith("[")) {
@@ -110,7 +108,7 @@ public class LoadingService extends Service {
         return date.replaceAll("[()]", "");
     }
 
-    public Checklist getChecklist() {
+    public CheckList getChecklist() {
         return checklist;
     }
 

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedConstruction;
-import resources.util.datastorage.Checklist;
+import resources.util.datastorage.CheckList;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
 import resources.util.tasks.Task;
@@ -54,18 +54,18 @@ class BotServiceTest {
     void todoCommand_addsTask_sucess() throws IOException {
         setInput("todo read book\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
             new BotService();
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
-            verify(mockChecklist).addTask(captor.capture());
+            verify(mockCheckList).addTask(captor.capture());
 
             Task added = captor.getValue();
             assertEquals(ToDosTask.class, added.getClass());
@@ -77,18 +77,18 @@ class BotServiceTest {
     void deadlineCommand_WithEndDate_success() throws IOException {
         setInput("deadline submit report /by 01/01/2025 1600\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
             new BotService();
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
-            verify(mockChecklist).addTask(captor.capture());
+            verify(mockCheckList).addTask(captor.capture());
 
             Task added = captor.getValue();
             assertEquals(DeadlineTask.class, added.getClass());
@@ -102,18 +102,18 @@ class BotServiceTest {
     void deadlineCommand_WithoutEndDate_success() throws IOException {
         setInput("deadline submit report\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class);) {
 
             new BotService();
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
-            verify(mockChecklist).addTask(captor.capture());
+            verify(mockCheckList).addTask(captor.capture());
 
             Task added = captor.getValue();
             assertEquals(DeadlineTask.class, added.getClass());
@@ -126,18 +126,18 @@ class BotServiceTest {
     void eventCommand_WithStartAndEndDates_success() throws IOException {
         setInput("event daily stand up /from 02/01/2025 1000 /to 02/01/2025 1200\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class);) {
 
             new BotService();
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
-            verify(mockChecklist).addTask(captor.capture());
+            verify(mockCheckList).addTask(captor.capture());
 
             Task added = captor.getValue();
             assertEquals(EventTask.class, added.getClass());
@@ -151,18 +151,18 @@ class BotServiceTest {
     void eventCommand_WithoutStartAndEndDates_success() throws IOException {
         setInput("event daily stand up\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class);) {
 
             new BotService();
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
-            verify(mockChecklist).addTask(captor.capture());
+            verify(mockCheckList).addTask(captor.capture());
 
             Task added = captor.getValue();
             assertEquals(EventTask.class, added.getClass());
@@ -176,17 +176,17 @@ class BotServiceTest {
     void deleteCommand_RemoveIndexZero_success() throws IOException {
         setInput("delete 1\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
             new BotService();
 
-            verify(mockChecklist).removeTaskByIndex(0);
+            verify(mockCheckList).removeTaskByIndex(0);
         }
     }
 
@@ -194,18 +194,18 @@ class BotServiceTest {
     void markAndUnmark_callChecklistWithParsedIndex() throws IOException {
         setInput("todo code\ntodo sleep\nmark 2\nunmark 2\nbye\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
                      mockConstruction(LoadingService.class, (mock, ctx)
-                             -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                             -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
             new BotService();
 
-            verify(mockChecklist).markTask(1);
-            verify(mockChecklist).unmarkTask(1);
+            verify(mockCheckList).markTask(1);
+            verify(mockCheckList).unmarkTask(1);
         }
     }
 
@@ -213,10 +213,10 @@ class BotServiceTest {
     void invalidCommand_throwsIllegalState_failure() {
         setInput("nonsense whatever\n");
 
-        Checklist mockChecklist = mock(Checklist.class);
+        CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
-                     mockConstruction(LoadingService.class, (mock, ctx) -> when(mock.getChecklist()).thenReturn(mockChecklist));
+                     mockConstruction(LoadingService.class, (mock, ctx) -> when(mock.getChecklist()).thenReturn(mockCheckList));
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
