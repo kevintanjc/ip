@@ -232,7 +232,7 @@ public class BotService extends Service {
     }
 
     /**
-     * Starts the bot service by loading the {@link Checklist} and initiating the command execution loop.
+     * Starts the bot service by loading the {@link CheckList} and initiating the command execution loop.
      *
      * @throws IOException if an I/O error occurs during service startup.
      */
