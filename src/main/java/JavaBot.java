@@ -1,4 +1,3 @@
-import static resources.util.BotConstants.*;
 import resources.util.BotService;
 
 public class JavaBot {

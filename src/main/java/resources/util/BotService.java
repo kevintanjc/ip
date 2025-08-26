@@ -5,7 +5,17 @@ import java.util.List;
 import java.util.Scanner;
 
 import static java.util.Objects.isNull;
-import static resources.util.BotConstants.*;
+import static resources.util.BotConstants.DEADLINE_TASK_DESCRIPTION;
+import static resources.util.BotConstants.DELETE_COMMAND;
+import static resources.util.BotConstants.EVENT_TASK_DESCRIPTION;
+import static resources.util.BotConstants.EXIT_COMMAND;
+import static resources.util.BotConstants.INDENT;
+import static resources.util.BotConstants.LINE_SEPARATOR;
+import static resources.util.BotConstants.LIST_COMMAND;
+import static resources.util.BotConstants.MARK_COMMAND;
+import static resources.util.BotConstants.NO_DATE_GIVEN;
+import static resources.util.BotConstants.TODO_TASK_DESCRIPTION;
+import static resources.util.BotConstants.UNMARK_COMMAND;
 
 public class BotService {
 
