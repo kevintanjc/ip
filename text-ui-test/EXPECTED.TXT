@@ -1,5 +1,5 @@
 _________________________________________
-Hello! I'm JavaBot
+Hello! I'm app.JavaBot
 What can I do for you?
 
     Thanks for letting me know! I have added:

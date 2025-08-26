@@ -1,6 +1,6 @@
 package resources.util.services;
 
-import resources.util.datastorage.Checklist;
+import resources.util.datastorage.CheckList;
 import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
@@ -33,7 +33,7 @@ import static resources.util.constants.BotConstants.UNMARK_COMMAND;
 public class BotService extends Service {
 
     private Scanner scanner;
-    private Checklist checklist;
+    private CheckList checkList;
 
     /**
      * Executes the main service loop, handling user input and processing commands.
@@ -60,12 +60,12 @@ public class BotService extends Service {
             if (command.equals(EXIT_COMMAND)) {
                 break;
             } else if (command.equals(LIST_COMMAND)) {
-                checklist.printTasks();
+                checkList.printTasks();
             } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
                 try {
                     Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (index < input.length()) {
-                        checklist.markTask(index);
+                        checkList.markTask(index);
                     } else {
                         System.out.println(INDENT + "Please provide a valid task number to mark.");
                     }
@@ -76,7 +76,7 @@ public class BotService extends Service {
                 try {
                     Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (index < input.length()) {
-                        checklist.unmarkTask(index);
+                        checkList.unmarkTask(index);
                     } else {
                         System.out.println(INDENT + "Please provide a valid task number to unmark.");
                     }
@@ -84,15 +84,15 @@ public class BotService extends Service {
                     throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
                 }
             } else if (command.equals(DELETE_COMMAND)) {
-                checklist.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
+                checkList.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
             } else {
-                insertTaskIntoChecklist(taskType, input, checklist);
+                insertTaskIntoChecklist(taskType, input, checkList);
             }
         }
 
         scanner.close();
         endService();
-        new SavingService(checklist);
+        new SavingService(checkList);
     }
 
     /**
@@ -122,22 +122,22 @@ public class BotService extends Service {
      *
      * @param taskFlag  an Integer representing the type of task (1 for To-Do, 2 for Deadline, 3 for Event).
      * @param inputString the input String containing the task details.
-     * @param checklist the Checklist object to which the task will be added.
+     * @param checkList the Checklist object to which the task will be added.
      * @throws IllegalStateException    if an invalid task type is provided.
      * @throws NullPointerException     if task creation fails due to null values.
      * @return
      */
-    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, Checklist checklist)
+    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, CheckList checkList)
             throws IllegalStateException, NullPointerException {
         if (taskFlag == -1) {
             throw new IllegalStateException("Invalid task type! Please use 'todo', 'deadline', or 'event'.");
         }
         if (taskFlag == 1) {
-            checklist.addTask(initializeToDoTask(inputString));
+            checkList.addTask(initializeToDoTask(inputString));
         } else if (taskFlag == 2) {
-            checklist.addTask(initializeDeadlineTask(inputString));
+            checkList.addTask(initializeDeadlineTask(inputString));
         } else if (taskFlag == 3) {
-            checklist.addTask(initializeEventTask(inputString));
+            checkList.addTask(initializeEventTask(inputString));
         } else {
             throw new NullPointerException("Task creation failed! Please check your input.");
         }
@@ -173,7 +173,8 @@ public class BotService extends Service {
         String[] parts = inputStr.substring(9).split(" /by ");
         for (String str : parts) {
             if (str.contains("/by")) {
-                throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+                throw new IllegalStateException("Invalid format for Deadline task!"
+                        + "Use 'deadline <description> /by <date>'.");
             }
         }
         if (parts.length == 0) {
@@ -181,15 +182,16 @@ public class BotService extends Service {
         } else if (parts.length == 1) {
             DeadlineTask task = new DeadlineTask(parts[0], null);
             System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                    + INDENT + task.toString());
+                    + INDENT + task);
             return task;
         } else if (parts.length == 2) {
             DeadlineTask task = new DeadlineTask(parts[0], DateTimeUtil.convertStringToLocalDate(parts[1]));
             System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                    + INDENT + task.toString());
+                    + INDENT + task);
             return task;
         } else {
-            throw new IllegalStateException("Invalid format for Deadline task! Use 'deadline <description> /by <date>'.");
+            throw new IllegalStateException("Invalid format for Deadline task!"
+                    + "Use 'deadline <description> /by <date>'.");
         }
     }
 
@@ -214,7 +216,8 @@ public class BotService extends Service {
         } else if (eventParts.length == 1) {
             return new EventTask(eventParts[0].trim(), null, null);
         } else if (eventParts.length == 2) {
-            return new EventTask(eventParts[0].trim(), DateTimeUtil.convertStringToLocalDate(eventParts[1]), null);
+            return new EventTask(eventParts[0].trim(), DateTimeUtil.convertStringToLocalDate(eventParts[1]),
+                    null);
         } else if (eventParts.length == 3) {
             return new EventTask(eventParts[0].trim(),
                     DateTimeUtil.convertStringToLocalDate(eventParts[1]),
@@ -233,7 +236,7 @@ public class BotService extends Service {
     @Override
     protected void startService() throws IOException {
         LoadingService load = new LoadingService();
-        this.checklist = load.getChecklist();
+        this.checkList = load.getChecklist();
         System.out.println(LINE_SEPARATOR + "\n" + "Hello! I'm JavaBot\n" + "What can I do for you?\n");
         executeService();
     }

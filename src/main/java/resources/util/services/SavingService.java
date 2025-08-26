@@ -1,6 +1,6 @@
 package resources.util.services;
 
-import resources.util.datastorage.Checklist;
+import resources.util.datastorage.CheckList;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import static resources.util.constants.BotConstants.FILE_PATH;
  */
 public class SavingService extends Service {
     String filePath = FILE_PATH;
-    Checklist checklist;
+    CheckList checklist;
 
     /**
      * Executes the saving service by writing tasks from the {@link Checklist} to a storage file.
@@ -83,7 +83,7 @@ public class SavingService extends Service {
         System.out.println("Tasks saved successfully! Shutting down...");
     }
 
-    public SavingService(Checklist checklist) throws IOException {
+    public SavingService(CheckList checklist) throws IOException {
         this.checklist = checklist;
         startService();
     }

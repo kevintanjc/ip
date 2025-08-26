@@ -1,6 +1,6 @@
 package resources.util.services;
 
-import resources.util.datastorage.Checklist;
+import resources.util.datastorage.CheckList;
 import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
@@ -32,7 +32,7 @@ import static resources.util.constants.BotConstants.FILE_PATH;
  * The {@link LoadingService} class extends {@link Service} class and provides implementations for starting and ending
  * the service.
  *
- * @see Checklist
+ * @see CheckList
  * @see Task
  * @see EventTask
  * @see ToDosTask
@@ -42,7 +42,7 @@ import static resources.util.constants.BotConstants.FILE_PATH;
 public class LoadingService extends Service {
 
     private Scanner scanner;
-    private Checklist checklist;
+    private CheckList checklist;
 
     /**
      * Executes the loading service by reading tasks from a storage file and adding them to the {@link Checklist}.
@@ -55,7 +55,7 @@ public class LoadingService extends Service {
      */
     @Override
     protected void executeService() throws IOException {
-        checklist = new Checklist();
+        checklist = new CheckList();
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.startsWith("[")) {
@@ -185,7 +185,7 @@ public class LoadingService extends Service {
      *
      * @return {@code Checklist} — the checklist with loaded tasks.
      */
-    public Checklist getChecklist() {
+    public CheckList getChecklist() {
         return checklist;
     }
 

@@ -57,7 +57,9 @@ public class Task {
      */
     @Override
     public String toString() {
-        String symbol = completed ? BotConstants.Symbol.COMPLETED.toString() : BotConstants.Symbol.INCOMPLETE.toString();
+        String symbol = completed
+                ? BotConstants.Symbol.COMPLETED.toString()
+                : BotConstants.Symbol.INCOMPLETE.toString();
         return String.format("%s %s", symbol, description);
     }
 }

@@ -46,6 +46,7 @@ public class EventTask extends Task {
                 ? NO_DATE_GIVEN
                 : DateTimeUtil.convertLocalDateToFormattedString(endDate);
 
-        return String.format("%s%s (from: %s to: %s)", TASK_TYPE, super.toString(), formattedStartDate, formattedEndDate);
+        return String.format("%s%s (from: %s to: %s)", TASK_TYPE, super.toString(),
+                formattedStartDate, formattedEndDate);
     }
 }
