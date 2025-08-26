@@ -1,5 +1,6 @@
 package resources.util.services;
 
+import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
 import resources.util.tasks.Task;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -68,7 +68,8 @@ public class LoadingService extends Service {
         String startDate = parts[3];
         String endDate = formatDate(parts[5]);
         boolean completed = checkCompletedTask(parts[0].substring(3));
-        EventTask output = new EventTask(description, startDate, endDate);
+        EventTask output = new EventTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(startDate),
+                DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
         if (completed) {
             output.setCompleted();
         }
@@ -91,7 +92,7 @@ public class LoadingService extends Service {
         String description = parts[1];
         String endDate = formatDate(parts[3]);
         boolean completed = checkCompletedTask(parts[0].substring(3));
-        DeadlineTask output = new DeadlineTask(description, endDate);
+        DeadlineTask output = new DeadlineTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
         if (completed) {
             output.setCompleted();
         }
