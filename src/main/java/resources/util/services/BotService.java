@@ -6,7 +6,6 @@ import resources.util.tasks.Task;
 import resources.util.tasks.ToDosTask;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,7 +29,6 @@ public class BotService extends Service {
 
     protected void executeService() throws IllegalStateException, NullPointerException, IndexOutOfBoundsException, IOException {
         scanner = new Scanner(System.in);
-        checklist = new ArrayList<>();
 
         while (true) {
             String input = scanner.nextLine();
@@ -197,6 +195,8 @@ public class BotService extends Service {
 
     @Override
     protected void startService() throws IOException {
+        LoadingService load = new LoadingService();
+        this.checklist = load.getChecklist();
         System.out.println(LINE_SEPARATOR + "\n" + "Hello! I'm JavaBot\n" + "What can I do for you?\n");
         executeService();
     }
