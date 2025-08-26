@@ -73,4 +73,27 @@ public class Checklist {
         }
     }
 
+    /**
+     * Searches for tasks containing the specified keyword and prints them.
+     *
+     * @param keyword The keyword to search for in task descriptions.
+     * @return
+     */
+    public void searchAndPrintTasks(String keyword) {
+        List<Task> matchedTasks = new ArrayList<>();
+        for (Task task : checklist) {
+            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                matchedTasks.add(task);
+            }
+        }
+        if (matchedTasks.isEmpty()) {
+            System.out.println(INDENT + "No matching tasks found for the keyword: " + keyword);
+        } else {
+            System.out.println(INDENT + "Here are the matching tasks in your list:");
+            for (int i = 0; i < matchedTasks.size(); i++) {
+                System.out.println(INDENT + (i + 1) + ". " + matchedTasks.get(i).toString());
+            }
+        }
+    }
+
 }

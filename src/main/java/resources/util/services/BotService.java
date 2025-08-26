@@ -14,6 +14,7 @@ import static resources.util.constants.BotConstants.DEADLINE_TASK_DESCRIPTION;
 import static resources.util.constants.BotConstants.DELETE_COMMAND;
 import static resources.util.constants.BotConstants.EVENT_TASK_DESCRIPTION;
 import static resources.util.constants.BotConstants.EXIT_COMMAND;
+import static resources.util.constants.BotConstants.FIND_COMMAND;
 import static resources.util.constants.BotConstants.INDENT;
 import static resources.util.constants.BotConstants.LINE_SEPARATOR;
 import static resources.util.constants.BotConstants.LIST_COMMAND;
@@ -63,8 +64,10 @@ public class BotService extends Service {
                 }
             } else if (command.equals(DELETE_COMMAND)) {
                 checklist.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
+            } else if (command.equals(FIND_COMMAND)) {
+                checklist.searchAndPrintTasks(input.split(" ")[1]);
             } else {
-                insertTaskIntoChecklist(taskType, input, checklist);
+                    insertTaskIntoChecklist(taskType, input, checklist);
             }
         }
 

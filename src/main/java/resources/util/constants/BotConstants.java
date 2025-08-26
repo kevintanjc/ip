@@ -16,6 +16,8 @@ public abstract class BotConstants {
 
     public static final String DELETE_COMMAND = "delete";
 
+    public static final String FIND_COMMAND = "find";
+
     public static final String TODO_TASK_TYPE = "[T]";
 
     public static final String DEADLINE_TASK_TYPE = "[D]";
