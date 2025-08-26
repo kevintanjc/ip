@@ -5,6 +5,7 @@ import resources.util.tasks.EventTask;
 import resources.util.tasks.Task;
 import resources.util.tasks.ToDosTask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class BotService extends Service {
     private Scanner scanner;
     private List<Task> checklist;
 
-    protected void executeService() throws IllegalStateException, NullPointerException, IndexOutOfBoundsException {
+    protected void executeService() throws IllegalStateException, NullPointerException, IndexOutOfBoundsException, IOException {
         scanner = new Scanner(System.in);
         checklist = new ArrayList<>();
 
@@ -70,7 +71,8 @@ public class BotService extends Service {
         }
 
         scanner.close();
-        endBotService();
+        endService();
+        new SavingService(checklist);
     }
 
     private void listTasks() {
@@ -193,16 +195,18 @@ public class BotService extends Service {
                 + INDENT + removedTask.toString() + "\n" + INDENT + "You now have " + checklist.size() + " tasks in your list.");
     }
 
-    private void startBotService() {
+    @Override
+    protected void startService() throws IOException {
         System.out.println(LINE_SEPARATOR + "\n" + "Hello! I'm JavaBot\n" + "What can I do for you?\n");
         executeService();
     }
 
-    private void endBotService() {
+    @Override
+    protected void endService() {
         System.out.println("See you next time!\n" + LINE_SEPARATOR);
     }
 
-    public BotService() {
-        startBotService();
+    public BotService() throws IOException {
+        startService();
     }
 }
