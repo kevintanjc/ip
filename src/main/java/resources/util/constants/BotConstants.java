@@ -1,4 +1,4 @@
-package resources.util;
+package resources.util.constants;
 
 public abstract class BotConstants {
 

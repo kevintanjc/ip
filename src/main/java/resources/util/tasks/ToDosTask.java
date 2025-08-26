@@ -1,6 +1,6 @@
-package resources.util;
+package resources.util.tasks;
 
-import static resources.util.BotConstants.TODO_TASK_TYPE;
+import static resources.util.constants.BotConstants.TODO_TASK_TYPE;
 
 public class ToDosTask extends Task {
 
