@@ -4,6 +4,7 @@ import resources.util.datastorage.Checklist;
 import resources.util.parsers.DateTimeUtil;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
+import resources.util.tasks.Task;
 import resources.util.tasks.ToDosTask;
 
 import java.io.IOException;
@@ -21,11 +22,32 @@ import static resources.util.constants.BotConstants.MARK_COMMAND;
 import static resources.util.constants.BotConstants.TODO_TASK_DESCRIPTION;
 import static resources.util.constants.BotConstants.UNMARK_COMMAND;
 
+/**
+ * Represents the main service of the bot application.
+ * <p>
+ * The BotService class extends {@link Service} class and provides implementations for starting and ending
+ * the service. It handles user input, processes commands, and manages a checklist of tasks.
+ *
+ * @author Kevin Tan
+ */
 public class BotService extends Service {
 
     private Scanner scanner;
     private Checklist checklist;
 
+    /**
+     * Executes the main service loop, handling user input and processing commands.
+     * <p>
+     * The method continuously reads user input from the console, processes commands such as adding tasks,
+     * marking tasks as completed, unmarking tasks, deleting tasks, and listing all tasks. The loop continues
+     * until the user inputs the exit command.
+     *
+     * @throws IllegalStateException    if an invalid task type is provided.
+     * @throws NullPointerException     if task creation fails due to null values.
+     * @throws IndexOutOfBoundsException if an invalid task index is provided for marking or unmarking.
+     * @throws IOException              if an I/O error occurs during service execution.
+     */
+    @Override
     protected void executeService() throws IllegalStateException, NullPointerException,
             IndexOutOfBoundsException, IOException {
         scanner = new Scanner(System.in);
@@ -73,6 +95,12 @@ public class BotService extends Service {
         new SavingService(checklist);
     }
 
+    /**
+     * Determines the type of {@link Task} based on the input string.
+     *
+     * @param str the input String representing the task command.
+     * @return {@code Integer} - 1 for To-Do, 2 for Deadline, 3 for Event, -1 for invalid task type.
+     */
     private Integer getTask(String str) {
         if (str.length() >= 4) {
             if (str.equals(TODO_TASK_DESCRIPTION)) {
@@ -88,6 +116,17 @@ public class BotService extends Service {
         return -1;
     }
 
+    /**
+     * Inserts {@link EventTask}, {@link ToDosTask} or {@link DeadlineTask} into the checklist
+     * based on certain conditions.
+     *
+     * @param taskFlag  an Integer representing the type of task (1 for To-Do, 2 for Deadline, 3 for Event).
+     * @param inputString the input String containing the task details.
+     * @param checklist the Checklist object to which the task will be added.
+     * @throws IllegalStateException    if an invalid task type is provided.
+     * @throws NullPointerException     if task creation fails due to null values.
+     * @return
+     */
     private void insertTaskIntoChecklist(Integer taskFlag, String inputString, Checklist checklist)
             throws IllegalStateException, NullPointerException {
         if (taskFlag == -1) {
@@ -104,6 +143,13 @@ public class BotService extends Service {
         }
     }
 
+    /**
+     * Initializes a {@link ToDosTask} from an input String.
+     *
+     * @param inputStr the input String containing the task details.
+     * @return {@code ToDosTask} - the initialized ToDosTask object.
+     * @throws IllegalStateException if the task description is empty.
+     */
     private ToDosTask initializeToDoTask(String inputStr) throws IllegalStateException {
         String description = inputStr.substring(5);
         ToDosTask task = new ToDosTask(description);
@@ -115,6 +161,14 @@ public class BotService extends Service {
         return task;
     }
 
+    /**
+     * Initializes a {@link DeadlineTask} from an input String.
+     *
+     * @param inputStr the input String containing the task details.
+     * @return {@code DeadlineTask} - the initialized DeadlineTask object.
+     * @throws IllegalStateException    if the task description is empty or format is invalid.
+     * @throws DateTimeParseException if the date format is invalid.
+     */
     private DeadlineTask initializeDeadlineTask(String inputStr) throws IllegalStateException, DateTimeParseException {
         String[] parts = inputStr.substring(9).split(" /by ");
         for (String str : parts) {
@@ -139,6 +193,14 @@ public class BotService extends Service {
         }
     }
 
+    /**
+     * Initializes an {@link EventTask} from an input String.
+     *
+     * @param inputStr the input String containing the task details.
+     * @return {@code EventTask} - the initialized EventTask object.
+     * @throws IllegalStateException    if the task description is empty or format is invalid.
+     * @throws DateTimeParseException if the date format is invalid.
+     */
     private EventTask initializeEventTask(String inputStr) throws IllegalStateException, DateTimeParseException {
         String[] eventParts = inputStr.substring(6).split(" /from | /to ");
         for (String str : eventParts) {
@@ -163,6 +225,11 @@ public class BotService extends Service {
         }
     }
 
+    /**
+     * Starts the bot service by loading the {@link Checklist} and initiating the command execution loop.
+     *
+     * @throws IOException if an I/O error occurs during service startup.
+     */
     @Override
     protected void startService() throws IOException {
         LoadingService load = new LoadingService();
@@ -171,6 +238,9 @@ public class BotService extends Service {
         executeService();
     }
 
+    /**
+     * Ends the bot service by displaying a farewell message.
+     */
     @Override
     protected void endService() {
         System.out.println("See you next time!\n" + LINE_SEPARATOR);

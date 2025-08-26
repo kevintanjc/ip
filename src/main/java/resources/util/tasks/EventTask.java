@@ -7,6 +7,14 @@ import static java.util.Objects.isNull;
 import static resources.util.constants.BotConstants.EVENT_TASK_TYPE;
 import static resources.util.constants.BotConstants.NO_DATE_GIVEN;
 
+/**
+ * Represents an event task which has a description, start date, and end date.
+ * <p>
+ * An EventTask object contains a description of the task, a start date, and an end date.
+ * It extends the {@link Task} class to include start and end timings of a given event.
+ *
+ * @author Kevin Tan
+ */
 public class EventTask extends Task {
 
     private LocalDateTime startDate;
@@ -21,6 +29,14 @@ public class EventTask extends Task {
         this.endDate = endDate;
     }
 
+    /**
+     * Returns a String representation of the task which includes its description, completion as a symbol,
+     * start date, and end date.
+     * <p>
+     * Example: "[E][ ] read book (from: Jan 01 1990, 12:00 pm to: Jan 01 1990, 1:00 pm)"
+     *
+     * @return {@code String} — a string representation of EventTask.
+     */
     @Override
     public String toString() {
         String formattedStartDate = isNull(startDate)
