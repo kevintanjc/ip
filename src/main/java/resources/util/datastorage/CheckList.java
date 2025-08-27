@@ -7,6 +7,13 @@ import java.util.List;
 
 import static resources.util.constants.BotConstants.INDENT;
 
+/**
+ * Represents a checklist that manages a list of tasks.
+ * <p>
+ * The {@link CheckList} class provides methods to handle and manipulate a list of {@link Task} objects.
+ *
+ * @author Kevin Tan
+ */
 public class CheckList {
 
     private List<Task> checkList;
@@ -15,10 +22,21 @@ public class CheckList {
         this.checkList = new ArrayList<>();
     }
 
+    /**
+     * Adds a task to the checklist.
+     *
+     * @param task The {@link Task} to be added to the checklist.
+     */
     public void addTask(Task task) {
         checkList.add(task);
     }
 
+    /**
+     * Removes a task from the checklist by its index.
+     *
+     * @param index The index of the task to be removed (0-indexed).
+     * @throws IndexOutOfBoundsException if the index is out of range.
+     */
     public void removeTaskByIndex(int index) {
         if (index < 0 || index >= this.getSize()) {
             throw new IndexOutOfBoundsException("Invalid task number! Please provide a valid task number to delete.");
@@ -28,18 +46,39 @@ public class CheckList {
                 + INDENT + removedTask.toString() + "\n" + INDENT + "You now have " + this.getSize() + " tasks in your list.");
     }
 
+    /**
+     * Retrieves a task from the checklist by its index.
+     *
+     * @param index The index of the task to be retrieved (0-indexed).
+     * @return The {@link Task} at the specified index.
+     * @throws IndexOutOfBoundsException if the index is out of range.
+     */
     public Task getTaskByIndex(int index) {
         return checkList.get(index);
     }
 
+    /**
+     * Checks if the checklist is empty.
+     *
+     * @return {@code true} if the checklist is empty, {@code false} otherwise.
+     */
     public boolean isEmpty() {
         return checkList.isEmpty();
     }
 
+    /**
+     * Gets the number of tasks in the checklist.
+     *
+     * @return The size of the checklist.
+     */
     public int getSize() {
         return checkList.size();
     }
 
+    /**
+     * Prints all tasks in the checklist with their respective indices.
+     * If the checklist is empty, it notifies the user accordingly.
+     */
     public void printTasks() {
         if (checkList.isEmpty()) {
             System.out.println(INDENT + "Uh oh...You currently have no tasks in your list! Add some tasks to get started!");
@@ -51,6 +90,11 @@ public class CheckList {
         System.out.printf(INDENT + "You currently have %d items in your list!%n", this.getSize());
     }
 
+    /**
+     * Marks the task at the specified index as completed.
+     *
+     * @param index The index of the task to be marked as completed (0-based).
+     */
     public void markTask(int index) {
         Task task = checkList.get(index);
         if (task.isCompleted()) {
@@ -62,6 +106,11 @@ public class CheckList {
         }
     }
 
+    /**
+     * Marks the task at the specified index as not completed.
+     *
+     * @param index The index of the task to be marked as not completed (0-based).
+     */
     public void unmarkTask(int index) {
         Task task = checkList.get(index);
         if (!task.isCompleted()) {
