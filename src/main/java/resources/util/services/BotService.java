@@ -1,16 +1,5 @@
 package resources.util.services;
 
-import resources.util.datastorage.CheckList;
-import resources.util.parsers.DateTimeUtil;
-import resources.util.tasks.DeadlineTask;
-import resources.util.tasks.EventTask;
-import resources.util.tasks.Task;
-import resources.util.tasks.ToDosTask;
-
-import java.io.IOException;
-import java.time.format.DateTimeParseException;
-import java.util.Scanner;
-
 import static resources.util.constants.BotConstants.DEADLINE_TASK_DESCRIPTION;
 import static resources.util.constants.BotConstants.DELETE_COMMAND;
 import static resources.util.constants.BotConstants.EVENT_TASK_DESCRIPTION;
@@ -22,6 +11,17 @@ import static resources.util.constants.BotConstants.LIST_COMMAND;
 import static resources.util.constants.BotConstants.MARK_COMMAND;
 import static resources.util.constants.BotConstants.TODO_TASK_DESCRIPTION;
 import static resources.util.constants.BotConstants.UNMARK_COMMAND;
+
+import java.io.IOException;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+
+import resources.util.datastorage.CheckList;
+import resources.util.parsers.DateTimeUtil;
+import resources.util.tasks.DeadlineTask;
+import resources.util.tasks.EventTask;
+import resources.util.tasks.Task;
+import resources.util.tasks.ToDosTask;
 
 /**
  * Represents the main service of the bot application.
@@ -35,6 +35,15 @@ public class BotService extends Service {
 
     private Scanner scanner;
     private CheckList checkList;
+
+    /**
+     * Constructs a new BotService instance and starts the service.
+     *
+     * @throws IOException if an I/O error occurs during service startup.
+     */
+    public BotService() throws IOException {
+        startService();
+    }
 
     /**
      * Executes the main service loop, handling user input and processing commands.
@@ -128,7 +137,6 @@ public class BotService extends Service {
      * @param checkList the Checklist object to which the task will be added.
      * @throws IllegalStateException    if an invalid task type is provided.
      * @throws NullPointerException     if task creation fails due to null values.
-     * @return
      */
     private void insertTaskIntoChecklist(Integer taskFlag, String inputString, CheckList checkList)
             throws IllegalStateException, NullPointerException {
@@ -250,9 +258,5 @@ public class BotService extends Service {
     @Override
     protected void endService() {
         System.out.println("See you next time!\n" + LINE_SEPARATOR);
-    }
-
-    public BotService() throws IOException {
-        startService();
     }
 }

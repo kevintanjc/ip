@@ -25,7 +25,7 @@ import static resources.util.constants.BotConstants.FILE_PATH;
  * Usage:
  * <pre>
  *     LoadingService loadingService = new LoadingService();
- *     Checklist checklist = loadingService.getChecklist();
+ *     CheckList checkList = loadingService.getChecklist();
  * </pre>
  *
  * <p>
@@ -45,10 +45,10 @@ public class LoadingService extends Service {
     private CheckList checklist;
 
     /**
-     * Executes the loading service by reading tasks from a storage file and adding them to the {@link Checklist}.
+     * Executes the loading service by reading tasks from a storage file and adding them to the {@link CheckList}.
      * <p>
      * This method reads each line from the file, parses it into a {@link Task} object,
-     * and adds it to the {@link Checklist}.
+     * and adds it to the {@link CheckList}.
      * If the checklist is empty after loading, it notifies the user.
      *
      * @throws IOException if an I/O error occurs while reading the file.
@@ -120,10 +120,10 @@ public class LoadingService extends Service {
         String description = parts[0].substring(7);
         String startDate = parts[1];
         String endDate = formatDate(parts[2]);
-        boolean completed = checkCompletedTask(parts[0].substring(3));
+        boolean isCompleted = checkCompletedTask(parts[0].substring(3));
         EventTask output = new EventTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(startDate),
                 DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
-        if (completed) {
+        if (isCompleted) {
             output.setCompleted();
         }
         return output;
@@ -137,9 +137,9 @@ public class LoadingService extends Service {
     private ToDosTask createToDoTask(String line) {
         String[] parts = line.split("(?<!\\[)\\s+(?!\\])");
         String description = parts[1];
-        boolean completed = checkCompletedTask(parts[0].substring(3));
+        boolean isCompleted = checkCompletedTask(parts[0].substring(3));
         ToDosTask output = new ToDosTask(description);
-        if (completed) {
+        if (isCompleted) {
             output.setCompleted();
         }
         return output;
@@ -154,9 +154,9 @@ public class LoadingService extends Service {
         String[] parts = line.split(" \\(by: ");
         String description = parts[0].substring(7);
         String endDate = formatDate(parts[1]);
-        boolean completed = checkCompletedTask(parts[0].substring(3));
+        boolean isCompleted = checkCompletedTask(parts[0].substring(3));
         DeadlineTask output = new DeadlineTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
-        if (completed) {
+        if (isCompleted) {
             output.setCompleted();
         }
         return output;
