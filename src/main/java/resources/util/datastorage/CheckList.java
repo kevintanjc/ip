@@ -27,8 +27,9 @@ public class CheckList {
      *
      * @param task The {@link Task} to be added to the checklist.
      */
-    public void addTask(Task task) {
+    public String addTask(Task task) {
         checkList.add(task);
+        return INDENT + "Thanks for letting me know! I have added:\n" + INDENT + task;
     }
 
     /**
@@ -37,13 +38,13 @@ public class CheckList {
      * @param index The index of the task to be removed (0-indexed).
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
-    public void removeTaskByIndex(int index) {
+    public String removeTaskByIndex(int index) {
         if (index < 0 || index >= this.getSize()) {
             throw new IndexOutOfBoundsException("Invalid task number! Please provide a valid task number to delete.");
         }
         Task removedTask = checkList.remove(index);
-        System.out.println(INDENT + "Roger. The following task is removed:\n"
-                + INDENT + removedTask.toString() + "\n" + INDENT + "You now have " + this.getSize() + " tasks in your list.");
+        return INDENT + "Roger. The following task is removed:\n" + INDENT + removedTask.toString() + "\n" + INDENT
+                + "You now have " + this.getSize() + " tasks in your list.";
     }
 
     /**
@@ -79,15 +80,17 @@ public class CheckList {
      * Prints all tasks in the checklist with their respective indices.
      * If the checklist is empty, it notifies the user accordingly.
      */
-    public void printTasks() {
+    public String printTasks() {
+        StringBuilder output = new StringBuilder();
         if (checkList.isEmpty()) {
-            System.out.println(INDENT + "Uh oh...You currently have no tasks in your list! Add some tasks to get started!");
+            output.append(INDENT + "Uh oh...You currently have no tasks in your list! Add some tasks to get started!");
         }
-        System.out.println(INDENT + "Certainly! Here are your inputs thus far:");
+        output.append(INDENT + "Certainly! Here are your inputs thus far:\n");
         for (int i = 0; i < checkList.size(); i++) {
-            System.out.println(INDENT + (i + 1) + ". " + checkList.get(i).toString());
+            output.append(INDENT).append(i + 1).append(". ").append(checkList.get(i).toString()).append("\n");
         }
-        System.out.printf(INDENT + "You currently have %d items in your list!%n", this.getSize());
+        output.append(INDENT + "You currently have ").append(this.getSize()).append(" items in your list!");
+        return output.toString();
     }
 
     /**
@@ -95,14 +98,13 @@ public class CheckList {
      *
      * @param index The index of the task to be marked as completed (0-based).
      */
-    public void markTask(int index) {
+    public String markTask(int index) {
         Task task = checkList.get(index);
         if (task.isCompleted()) {
-            System.out.println(INDENT + "The following task has already been marked as done: " + task.getDescription());
+            return INDENT + "The following task has already been marked as done: " + task.getDescription();
         } else {
             task.setCompleted();
-            System.out.println(INDENT + "Well done! I'll mark it as done for you.\n" + INDENT
-                    + task);
+            return INDENT + "Well done! I'll mark it as done for you.\n" + INDENT + task;
         }
     }
 
@@ -111,14 +113,13 @@ public class CheckList {
      *
      * @param index The index of the task to be marked as not completed (0-based).
      */
-    public void unmarkTask(int index) {
+    public String unmarkTask(int index) {
         Task task = checkList.get(index);
         if (!task.isCompleted()) {
-            System.out.println(INDENT + "The following task has already been marked as not done: " + task.getDescription());
+            return INDENT + "The following task has already been marked as not done: " + task.getDescription();
         } else {
             task.setCompleted();
-            System.out.println(INDENT + "Okay! I'll mark it as not done for you.\n" + INDENT
-                    + task);
+            return INDENT + "Okay! I'll mark it as not done for you.\n" + INDENT + task;
         }
     }
 
@@ -128,21 +129,23 @@ public class CheckList {
      * @param keyword The keyword to search for in task descriptions.
      * @return
      */
-    public void searchAndPrintTasks(String keyword) {
+    public String searchAndPrintTasks(String keyword) {
         List<Task> matchedTasks = new ArrayList<>();
+        StringBuilder output = new StringBuilder();
         for (Task task : checkList) {
             if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 matchedTasks.add(task);
             }
         }
         if (matchedTasks.isEmpty()) {
-            System.out.println(INDENT + "No matching tasks found for the keyword: " + keyword);
+            output.append(INDENT + "No matching tasks found for the keyword: " + keyword);
         } else {
-            System.out.println(INDENT + "Here are the matching tasks in your list:");
+            output.append(INDENT + "Here are the matching tasks in your list:");
             for (int i = 0; i < matchedTasks.size(); i++) {
-                System.out.println(INDENT + (i + 1) + ". " + matchedTasks.get(i).toString());
+                output.append(INDENT + (i + 1) + ". " + matchedTasks.get(i).toString());
             }
         }
+        return output.toString();
     }
 
 }
