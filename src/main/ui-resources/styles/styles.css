@@ -1,15 +1,65 @@
 .main-window {
-    -fx-background-color: #f0f0f0; /* light gray */
+    -fx-bg:            #0f141a;   /* base background */
+    -fx-bg-elev:       #151b23;   /* cards/bubbles */
+    -fx-bg-elev-2:     #1b2430;   /* alternate bubble */
+    -fx-stroke:        #243041;   /* subtle borders */
+    -fx-text:          #e6e9ef;   /* primary text */
+    -fx-text-muted:    #a3b1c6;   /* secondary text */
+    -fx-accent:        #7aa2f7;   /* links, focus, accents */
+    -fx-focus-color:   -fx-accent;
+    -fx-faint-focus-color: rgba(122,162,247,0.18);
 }
-
+.main-window {
+    -fx-background-color: -fx-bg;
+}
+.scroll-pane,
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
 .user-dialog {
-    -fx-background-color: #e0e0e0; /* lighter gray */
-    -fx-background-radius: 10;
-    -fx-padding: 8;
+    -fx-background-color: linear-gradient(to bottom, -fx-bg-elev, -fx-bg-elev-2);
+    -fx-background-radius: 12;
+    -fx-padding: 10 12;
+    -fx-border-color: -fx-stroke;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0.2, 0, 2);
 }
-
+.user-dialog .label {
+    -fx-text-fill: -fx-text;
+}
 .bot-dialog {
-    -fx-background-color: #b0b0b0; /* darker gray */
-    -fx-background-radius: 10;
-    -fx-padding: 8;
+    -fx-background-color: linear-gradient(to bottom, #1a2230, #232e3e);
+    -fx-background-radius: 12;
+    -fx-padding: 10 12;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0.2, 0, 2);
+}
+.bot-dialog .label {
+    -fx-text-fill: -fx-text;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(0, 0, 0, 0.47);
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+}
+.scroll-bar:vertical .track {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+}
+.button {
+    -fx-background-color: #233046, #1e293b;
+    -fx-background-insets: 0, 1;
+    -fx-text-fill: -fx-text;
+}
+.button:hover {
+    -fx-background-color: #2a3954, #223049;
+}
+.text-field, .text-area {
+    -fx-background-color: #0f141a, #1a2230;
+    -fx-background-insets: 0, 1;
+    -fx-text-fill: -fx-text;
+    -fx-prompt-text-fill: -fx-text-muted;
 }

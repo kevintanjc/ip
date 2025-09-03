@@ -23,12 +23,14 @@ public class JavaBot extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(JavaBot.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
+            ap.getStyleClass().add("main-window");
             Scene scene = new Scene(ap);
             scene.getStylesheets().add(
                     Objects.requireNonNull(
                             JavaBot.class.getResource("/styles/styles.css")).toExternalForm());
-            stage.setScene(scene);
             fxmlLoader.<MainWindow>getController().setBotService(botService);
+            stage.setTitle("Java Bot");
+            stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

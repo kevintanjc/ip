@@ -31,7 +31,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        scrollPane.getStyleClass().add("main-window");
+        dialogContainer.getStyleClass().add("scroll-pane");
     }
 
     public void setBotService(BotService s) {
