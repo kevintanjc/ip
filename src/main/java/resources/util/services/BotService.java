@@ -6,7 +6,6 @@ import static resources.util.constants.BotConstants.EVENT_TASK_DESCRIPTION;
 import static resources.util.constants.BotConstants.EXIT_COMMAND;
 import static resources.util.constants.BotConstants.FIND_COMMAND;
 import static resources.util.constants.BotConstants.INDENT;
-import static resources.util.constants.BotConstants.LINE_SEPARATOR;
 import static resources.util.constants.BotConstants.LIST_COMMAND;
 import static resources.util.constants.BotConstants.MARK_COMMAND;
 import static resources.util.constants.BotConstants.TODO_TASK_DESCRIPTION;
@@ -14,7 +13,6 @@ import static resources.util.constants.BotConstants.UNMARK_COMMAND;
 
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 
 import resources.util.datastorage.CheckList;
 import resources.util.parsers.DateTimeUtil;
@@ -32,19 +30,7 @@ import resources.util.tasks.ToDosTask;
  * @author Kevin Tan
  */
 public class BotService extends Service {
-
-    private Scanner scanner;
     private CheckList checkList;
-
-    /**
-     * Constructs a new BotService instance and starts the service.
-     *
-     * @throws IOException if an I/O error occurs during service startup.
-     */
-    public BotService() throws IOException {
-        startService();
-    }
-
     /**
      * Executes the main service loop, handling user input and processing commands.
      * <p>
@@ -58,53 +44,46 @@ public class BotService extends Service {
      * @throws IOException              if an I/O error occurs during service execution.
      */
     @Override
-    protected void executeService() throws IllegalStateException, NullPointerException,
-            IndexOutOfBoundsException, IOException {
-        scanner = new Scanner(System.in);
+    public String executeService(String input) {
+        String command = input.split(" ")[0];
+        int taskType = getTask(input.split(" ")[0]);
+        String output = "";
 
-        while (true) {
-            String input = scanner.nextLine();
-            String command = input.split(" ")[0];
-            int taskType = getTask(input.split(" ")[0]);
-
-            if (command.equals(EXIT_COMMAND)) {
-                break;
-            } else if (command.equals(LIST_COMMAND)) {
-                checkList.printTasks();
-            } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
-                try {
-                    Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
-                    if (index < input.length()) {
-                        checkList.markTask(index);
-                    } else {
-                        System.out.println(INDENT + "Please provide a valid task number to mark.");
-                    }
-                } catch (NumberFormatException e) {
-                    throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
+        if (command.equals(EXIT_COMMAND)) {
+            output = endService();
+        } else if (command.equals(LIST_COMMAND)) {
+            output = checkList.printTasks();
+        } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
+            try {
+                Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
+                if (index < input.length()) {
+                    output = checkList.markTask(index);
+                } else {
+                    output = INDENT + "Please provide a valid task number to mark.";
                 }
-            } else if (input.length() >= 8 && command.equals(UNMARK_COMMAND)) {
-                try {
-                    Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
-                    if (index < input.length()) {
-                        checkList.unmarkTask(index);
-                    } else {
-                        System.out.println(INDENT + "Please provide a valid task number to unmark.");
-                    }
-                } catch (NumberFormatException e) {
-                    throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
-                }
-            } else if (command.equals(DELETE_COMMAND)) {
-                checkList.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
-            } else if (command.equals(FIND_COMMAND)) {
-                checkList.searchAndPrintTasks(input.split(" ")[1]);
-            } else {
-                insertTaskIntoChecklist(taskType, input, checkList);
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
             }
+        } else if (input.length() >= 8 && command.equals(UNMARK_COMMAND)) {
+            try {
+                Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
+                if (index < input.length()) {
+                    output = checkList.unmarkTask(index);
+                } else {
+                    output = INDENT + "Please provide a valid task number to unmark.";
+                }
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("Invalid task number format! Unable to parse as an integer.");
+            }
+        } else if (command.equals(DELETE_COMMAND)) {
+            output = checkList.removeTaskByIndex(Integer.parseInt(input.split(" ")[1]) - 1);
+        } else if (command.equals(FIND_COMMAND)) {
+            output = checkList.searchAndPrintTasks(input.split(" ")[1]);
+        } else {
+            output = insertTaskIntoChecklist(taskType, input, checkList);
         }
-
-        scanner.close();
-        endService();
         new SavingService(checkList);
+        return output;
     }
 
     /**
@@ -138,19 +117,19 @@ public class BotService extends Service {
      * @throws IllegalStateException    if an invalid task type is provided.
      * @throws NullPointerException     if task creation fails due to null values.
      */
-    private void insertTaskIntoChecklist(Integer taskFlag, String inputString, CheckList checkList)
+    private String insertTaskIntoChecklist(Integer taskFlag, String inputString, CheckList checkList)
             throws IllegalStateException, NullPointerException {
         if (taskFlag == -1) {
             throw new IllegalStateException("Invalid task type! Please use 'todo', 'deadline', or 'event'.");
         }
         if (taskFlag == 1) {
-            checkList.addTask(initializeToDoTask(inputString));
+            return checkList.addTask(initializeToDoTask(inputString));
         } else if (taskFlag == 2) {
-            checkList.addTask(initializeDeadlineTask(inputString));
+            return checkList.addTask(initializeDeadlineTask(inputString));
         } else if (taskFlag == 3) {
-            checkList.addTask(initializeEventTask(inputString));
+            return checkList.addTask(initializeEventTask(inputString));
         } else {
-            throw new NullPointerException("Task creation failed! Please check your input.");
+            return "Task creation failed! Please check your input.";
         }
     }
 
@@ -167,8 +146,6 @@ public class BotService extends Service {
         if (description.isEmpty()) {
             throw new IllegalStateException("To-Do task description cannot be empty!");
         }
-        System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                + INDENT + task.toString());
         return task;
     }
 
@@ -245,18 +222,24 @@ public class BotService extends Service {
      * @throws IOException if an I/O error occurs during service startup.
      */
     @Override
-    protected void startService() throws IOException {
-        LoadingService load = new LoadingService();
-        this.checkList = load.getChecklist();
-        System.out.println(LINE_SEPARATOR + "\n" + "Hello! I'm JavaBot\n" + "What can I do for you?\n");
-        executeService();
+    public String startService() {
+        try {
+            LoadingService load = new LoadingService();
+            load.startService();
+            load.executeService("");
+            load.endService();
+            this.checkList = load.getChecklist();
+            return "Hello! I'm JavaBot\n" + "What can I do for you?";
+        } catch (IOException e) {
+            return "Error loading checklist: " + e.getMessage();
+        }
     }
 
     /**
      * Ends the bot service by displaying a farewell message.
      */
     @Override
-    protected void endService() {
-        System.out.println("See you next time!\n" + LINE_SEPARATOR);
+    public String endService() {
+        return "See you next time!";
     }
 }

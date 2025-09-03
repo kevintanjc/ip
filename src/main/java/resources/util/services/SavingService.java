@@ -1,6 +1,6 @@
 package resources.util.services;
 
-import resources.util.datastorage.CheckList;
+import static resources.util.constants.BotConstants.FILE_PATH;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,12 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import static resources.util.constants.BotConstants.FILE_PATH;
+import resources.util.datastorage.CheckList;
 
 /**
  * Service class responsible for saving tasks from a checklist to a file.
  * <p>
- * The {@link SavingService} writes tasks from a {@link Checklist} object to a specified filepath.
+ * The {@link SavingService} writes tasks from a {@link CheckList} object to a specified filepath.
  * It ensures that the tasks are saved in a readable format, with each task on a new line.
  * <p>
  * Usage:
@@ -25,16 +25,24 @@ import static resources.util.constants.BotConstants.FILE_PATH;
  * The {@link SavingService} class extends {@link Service} class and provides implementations for starting and ending
  * the service.
  *
- * @see Checklist
+ * @see CheckList
  *
- * @author Kevin Tan
  */
 public class SavingService extends Service {
-    String filePath = FILE_PATH;
-    CheckList checklist;
+    private String filePath = FILE_PATH;
+    private CheckList checkList;
 
     /**
-     * Executes the saving service by writing tasks from the {@link Checklist} to a storage file.
+     * Constructs a SavingService instance with the specified checklist.
+     *
+     * @param checklist The {@link CheckList} containing tasks to be saved.
+     */
+    public SavingService(CheckList checklist) {
+        this.checkList = checklist;
+        startService();
+    }
+    /**
+     * Executes the saving service by writing tasks from the {@link CheckList} to a storage file.
      * <p>
      * This method creates or overwrites the specified file and writes each task from the checklist
      * into the file, ensuring that each task is on a new line. It also includes a header indicating
@@ -43,19 +51,20 @@ public class SavingService extends Service {
      * @throws IOException if an I/O error occurs while writing to the file.
      */
     @Override
-    protected void executeService() throws IOException {
+    public String executeService(String input) throws IOException {
         Path path = Paths.get(filePath);
 
-        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write("Your saved tasks:");
             writer.newLine();
             writer.newLine();
-            for (int i = 0; i < checklist.getSize(); i++) {
-                writer.write(checklist.getTaskByIndex(i).toString());
+            for (int i = 0; i < checkList.getSize(); i++) {
+                writer.write(checkList.getTaskByIndex(i).toString());
                 writer.newLine();
             }
         }
-        endService();
+        return "";
     }
 
     /**
@@ -67,9 +76,8 @@ public class SavingService extends Service {
      * @throws IOException if an I/O error occurs while starting the service.
      */
     @Override
-    protected void startService() throws IOException {
-        System.out.println("Saving tasks to: " + filePath);
-        executeService();
+    public String startService() {
+        return "Saving tasks to: " + filePath;
     }
 
     /**
@@ -79,12 +87,7 @@ public class SavingService extends Service {
      * and it notifies the user that the tasks have been saved.
      */
     @Override
-    protected void endService() {
-        System.out.println("Tasks saved successfully! Shutting down...");
-    }
-
-    public SavingService(CheckList checklist) throws IOException {
-        this.checklist = checklist;
-        startService();
+    public String endService() {
+        return "Tasks saved successfully! Shutting down...";
     }
 }

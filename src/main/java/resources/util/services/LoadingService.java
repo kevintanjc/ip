@@ -1,11 +1,7 @@
 package resources.util.services;
 
-import resources.util.datastorage.CheckList;
-import resources.util.parsers.DateTimeUtil;
-import resources.util.tasks.DeadlineTask;
-import resources.util.tasks.EventTask;
-import resources.util.tasks.Task;
-import resources.util.tasks.ToDosTask;
+import static resources.util.constants.BotConstants.EVENT_TASK_TYPE;
+import static resources.util.constants.BotConstants.FILE_PATH;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,8 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-import static resources.util.constants.BotConstants.EVENT_TASK_TYPE;
-import static resources.util.constants.BotConstants.FILE_PATH;
+import resources.util.datastorage.CheckList;
+import resources.util.parsers.DateTimeUtil;
+import resources.util.tasks.DeadlineTask;
+import resources.util.tasks.EventTask;
+import resources.util.tasks.Task;
+import resources.util.tasks.ToDosTask;
 
 /**
  * Service class responsible for loading tasks from a file into a checklist.
@@ -43,6 +43,19 @@ public class LoadingService extends Service {
 
     private Scanner scanner;
     private CheckList checklist;
+    /**
+     * Constructs a LoadingService instance and initializes the scanner to read from the specified file.
+     *
+     * @throws IOException if an I/O error occurs while accessing the file.
+     */
+    public LoadingService() throws IOException {
+        Path filePath = Paths.get(FILE_PATH);
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
+        }
+        scanner = new Scanner(Files.newBufferedReader(filePath));
+        startService();
+    }
 
     /**
      * Executes the loading service by reading tasks from a storage file and adding them to the {@link CheckList}.
@@ -54,9 +67,9 @@ public class LoadingService extends Service {
      * @throws IOException if an I/O error occurs while reading the file.
      */
     @Override
-    protected void executeService() throws IOException {
+    public String executeService(String input) {
         checklist = new CheckList();
-        while(scanner.hasNextLine()) {
+        while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.startsWith("[")) {
                 checklist.addTask(parseLineToTask(line));
@@ -64,9 +77,9 @@ public class LoadingService extends Service {
         }
 
         if (checklist == null || checklist.isEmpty()) {
-            System.out.println("There are no tasks in your checklist.");
+            return "There are no tasks in your checklist.";
         } else {
-            System.out.println("Tasks have been loaded successfully\n" + "type 'list' to view your tasks.");
+            return "Tasks have been loaded successfully\n" + "type 'list' to view your tasks.";
         }
     }
 
@@ -77,17 +90,17 @@ public class LoadingService extends Service {
      * @throws IOException if an I/O error occurs during service startup.
      */
     @Override
-    protected void startService() throws IOException {
-        System.out.println("Loading tasks from file...");
-        executeService();
+    public String startService() {
+        return "Loading tasks from file...";
     }
 
     /**
      * Ends the loading service by closing the scanner resource.
      */
     @Override
-    protected void endService() {
+    public String endService() {
         scanner.close();
+        return "Loading service ended.";
     }
 
     /**
@@ -187,14 +200,5 @@ public class LoadingService extends Service {
      */
     public CheckList getChecklist() {
         return checklist;
-    }
-
-    public LoadingService() throws IOException {
-        Path filePath = Paths.get(FILE_PATH);
-        if (!Files.exists(filePath)) {
-            Files.createFile(filePath);
-        }
-        scanner = new Scanner(Files.newBufferedReader(filePath));
-        startService();
     }
 }
