@@ -1,11 +1,14 @@
 package resources.ui.windows;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import resources.ui.boxes.DialogBox;
 import resources.util.services.BotService;
 
@@ -53,5 +56,12 @@ public class MainWindow extends AnchorPane {
         botBox.getStyleClass().add("bot-dialog");
         dialogContainer.getChildren().addAll(userBox, botBox);
         userInput.clear();
+
+        if ("bye".equalsIgnoreCase(input.trim())) {
+            // Close after 2 seconds so the goodbye is visible
+            PauseTransition delay = new PauseTransition(Duration.seconds(1));
+            delay.setOnFinished(event -> Platform.exit());
+            delay.play();
+        }
     }
 }
