@@ -18,7 +18,7 @@ package resources.util.services;
  */
 public abstract class Service {
 
-    public abstract String executeService(String input) throws Exception;
+    public abstract String executeService(String... inputs) throws Exception;
 
     public abstract String startService();
 

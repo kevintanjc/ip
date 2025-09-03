@@ -64,7 +64,7 @@ public class LoadingService extends Service {
      * @throws IOException if an I/O error occurs while reading the file.
      */
     @Override
-    public String executeService(String input) {
+    public String executeService(String... inputs) {
         checklist = new CheckList();
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
