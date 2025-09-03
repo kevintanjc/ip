@@ -10,31 +10,31 @@ JavaBot is a **task manager** written in Java. It helps you manage your tasks ef
 ## ✨ Features
 
 1. **Task Management**
-  - Add different types of tasks:
-    - ToDos (`todo <description>`)
-    - Deadlines (`deadline <description> /by <date>`)
-    - Events (`event <description> /from <start> /to <end>`)
-  - Mark/unmark tasks as done
-  - Delete tasks by index
-  - List all tasks in your checklist
+    - Add different types of tasks:
+      - ToDos (`todo <description>`)
+      - Deadlines (`deadline <description> /by <date>`)
+      - Events (`event <description> /from <start> /to <end>`)
+    - Mark/unmark tasks as done
+    - Delete tasks by index
+    - List all tasks in your checklist
 
 2. **Persistence**
-  - Tasks are automatically saved to disk via `SavingService`
-  - Tasks are reloaded at startup with `LoadingService`
+    - Tasks are automatically saved to disk via `SavingService`
+    - Tasks are reloaded at startup with `LoadingService`
 
 3. **Robust Error Handling**
-  - Friendly messages for invalid input, missing indices, or bad date formats
-  - Custom parsing with `DateTimeUtil` to handle date/time input
+    - Friendly messages for invalid input, missing indices, or bad date formats
+    - Custom parsing with `DateTimeUtil` to handle date/time input
 
 4. **Dark Mode UI**
-  - Sleek JavaFX interface with customizable CSS styles
-  - Bubble-style dialogs for user and bot
-  - Scrollable conversation history with styled scrollbar
+    - Sleek JavaFX interface with customizable CSS styles
+    - Bubble-style dialogs for user and bot
+    - Scrollable conversation history with styled scrollbar
 
 5. **Testing**
-  - Unit tests with JUnit 5
-  - Mockito for mocking dependencies and verifying behavior
-  - Coverage for services, storage, and core task logic
+    - Unit tests with JUnit 5
+    - Mockito for mocking dependencies and verifying behavior
+    - Coverage for services, storage, and core task logic
 
 ---
 
