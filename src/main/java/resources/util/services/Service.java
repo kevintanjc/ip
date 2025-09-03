@@ -18,9 +18,9 @@ package resources.util.services;
  */
 public abstract class Service {
 
-    protected abstract void executeService() throws Exception;
+    public abstract String executeService(String input) throws Exception;
 
-    protected abstract void startService() throws Exception;
+    public abstract String startService();
 
-    protected abstract void endService();
+    public abstract String endService();
 }
