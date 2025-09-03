@@ -32,16 +32,16 @@ import resources.util.tasks.ToDosTask;
 public class BotService extends Service {
     private CheckList checkList;
     /**
-     * Executes the main service loop, handling user input and processing commands.
+     * Executes the main service, handling user input and processing commands.
      * <p>
-     * The method continuously reads user input from the console, processes commands such as adding tasks,
-     * marking tasks as completed, unmarking tasks, deleting tasks, and listing all tasks. The loop continues
-     * until the user inputs the exit command.
-     *
+     * The method reads user input, processes commands such as adding tasks, marking tasks as completed,
+     * unmarking tasks, deleting tasks, and listing all tasks. The loop continues until the user inputs
+     * the exit command.
+     * @param input the user input command.
+     * @return A response message based on the executed command.
      * @throws IllegalStateException    if an invalid task type is provided.
      * @throws NullPointerException     if task creation fails due to null values.
      * @throws IndexOutOfBoundsException if an invalid task index is provided for marking or unmarking.
-     * @throws IOException              if an I/O error occurs during service execution.
      */
     @Override
     public String executeService(String input) {
@@ -52,7 +52,7 @@ public class BotService extends Service {
         if (command.equals(EXIT_COMMAND)) {
             output = endService();
         } else if (command.equals(LIST_COMMAND)) {
-            output = checkList.printTasks();
+            output = checkList.displayTasks();
         } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
             try {
                 Integer index = Integer.parseInt(input.split(" ")[1]) - 1;
@@ -85,10 +85,8 @@ public class BotService extends Service {
         new SavingService(checkList);
         return output;
     }
-
     /**
      * Determines the type of {@link Task} based on the input string.
-     *
      * @param str the input String representing the task command.
      * @return {@code Integer} - 1 for To-Do, 2 for Deadline, 3 for Event, -1 for invalid task type.
      */
@@ -106,14 +104,13 @@ public class BotService extends Service {
         }
         return -1;
     }
-
     /**
      * Inserts {@link EventTask}, {@link ToDosTask} or {@link DeadlineTask} into the checklist
      * based on certain conditions.
-     *
      * @param taskFlag  an Integer representing the type of task (1 for To-Do, 2 for Deadline, 3 for Event).
      * @param inputString the input String containing the task details.
      * @param checkList the Checklist object to which the task will be added.
+     * @return A confirmation message indicating the task has been added or an error message if task creation fails.
      * @throws IllegalStateException    if an invalid task type is provided.
      * @throws NullPointerException     if task creation fails due to null values.
      */
@@ -132,10 +129,8 @@ public class BotService extends Service {
             return "Task creation failed! Please check your input.";
         }
     }
-
     /**
      * Initializes a {@link ToDosTask} from an input String.
-     *
      * @param inputStr the input String containing the task details.
      * @return {@code ToDosTask} - the initialized ToDosTask object.
      * @throws IllegalStateException if the task description is empty.
@@ -148,10 +143,8 @@ public class BotService extends Service {
         }
         return task;
     }
-
     /**
      * Initializes a {@link DeadlineTask} from an input String.
-     *
      * @param inputStr the input String containing the task details.
      * @return {@code DeadlineTask} - the initialized DeadlineTask object.
      * @throws IllegalStateException    if the task description is empty or format is invalid.
@@ -182,10 +175,8 @@ public class BotService extends Service {
                     + "Use 'deadline <description> /by <date>'.");
         }
     }
-
     /**
      * Initializes an {@link EventTask} from an input String.
-     *
      * @param inputStr the input String containing the task details.
      * @return {@code EventTask} - the initialized EventTask object.
      * @throws IllegalStateException    if the task description is empty or format is invalid.
@@ -215,11 +206,9 @@ public class BotService extends Service {
                     + "/from <start date> /to <end date>'.");
         }
     }
-
     /**
      * Starts the bot service by loading the {@link CheckList} and initiating the command execution loop.
-     *
-     * @throws IOException if an I/O error occurs during service startup.
+     * @return A greeting message indicating the service has started or an error message if loading fails.
      */
     @Override
     public String startService() {
@@ -234,7 +223,6 @@ public class BotService extends Service {
             return "Error loading checklist: " + e.getMessage();
         }
     }
-
     /**
      * Ends the bot service by displaying a farewell message.
      */

@@ -18,6 +18,10 @@ import resources.util.services.BotService;
  */
 public class JavaBot extends Application {
     private BotService botService = new BotService();
+    /**
+     * The main entry point for the JavaBot application.
+     * @param stage command line arguments
+     */
     @Override
     public void start(Stage stage) {
         try {

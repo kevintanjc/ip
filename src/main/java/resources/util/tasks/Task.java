@@ -10,42 +10,39 @@ import resources.util.constants.BotConstants;
  * @author Kevin Tan
  */
 public class Task {
-
     private String description;
     private boolean completed;
-
+    /**
+     * Constructs a Task with the specified description.
+     * The task is initially marked as not completed.
+     *
+     * @param description the description of the task.
+     */
     public Task(String description) {
         this.description = description;
         this.completed = false;
     }
-
     /**
      * Gets the description of this task.
-     *
      * @return {@code String} — the description of the task.
      */
     public String getDescription() {
         return description;
     }
-
-    /** Gets whether the task is completed.
-     *
+    /**
+     * Gets whether the task is completed.
      * @return {@code boolean} — true if the task is completed, false otherwise.
      */
     public boolean isCompleted() {
         return completed;
     }
-
     /**
      * Toggles the completion status of the task.
      * If the task is completed, it will be marked as incomplete, and vice versa.
-     *
-     * @return
      */
     public void setCompleted() {
         completed = !completed;
     }
-
     /**
      * Returns a String representation of the task which includes its description and completion as a symbol.
      * <p>

@@ -11,13 +11,15 @@ import static resources.util.constants.BotConstants.TODO_TASK_TYPE;
  * @author Kevin Tan
  */
 public class ToDosTask extends Task {
-
     private static final String TASK_TYPE = TODO_TASK_TYPE;
-
+    /**
+     * Constructs a ToDosTask with the specified description.
+     *
+     * @param description the description of the task.
+     */
     public ToDosTask(String description) {
         super(description);
     }
-
     /**
      * Returns a String representation of the task which includes its description, completion as a symbol.
      * <p>

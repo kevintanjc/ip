@@ -1,11 +1,12 @@
 package resources.util.tasks;
 
-import java.time.LocalDateTime;
-import resources.util.parsers.DateTimeUtil;
-
 import static java.util.Objects.isNull;
 import static resources.util.constants.BotConstants.EVENT_TASK_TYPE;
 import static resources.util.constants.BotConstants.NO_DATE_GIVEN;
+
+import java.time.LocalDateTime;
+
+import resources.util.parsers.DateTimeUtil;
 
 /**
  * Represents an event task which has a description, start date, and end date.
@@ -16,19 +17,21 @@ import static resources.util.constants.BotConstants.NO_DATE_GIVEN;
  * @author Kevin Tan
  */
 public class EventTask extends Task {
-
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
-
     private static final String TASK_TYPE = EVENT_TASK_TYPE;
-
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    /**
+     * Constructs an EventTask with the specified description, start date, and end date.
+     *
+     * @param description the description of the task.
+     * @param startDate   the start date of the task as a {@link LocalDateTime} object.
+     * @param endDate     the end date of the task as a {@link LocalDateTime} object.
+     */
     public EventTask(String description, LocalDateTime startDate, LocalDateTime endDate) {
         super(description);
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
     /**
      * Returns a String representation of the task which includes its description, completion as a symbol,
      * start date, and end date.

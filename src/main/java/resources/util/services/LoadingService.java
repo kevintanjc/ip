@@ -32,20 +32,18 @@ import resources.util.tasks.ToDosTask;
  * The {@link LoadingService} class extends {@link Service} class and provides implementations for starting and ending
  * the service.
  *
+ * @author Kevin Tan
  * @see CheckList
  * @see Task
  * @see EventTask
  * @see ToDosTask
  * @see DeadlineTask
- * @author Kevin Tan
  */
 public class LoadingService extends Service {
-
     private Scanner scanner;
     private CheckList checklist;
     /**
      * Constructs a LoadingService instance and initializes the scanner to read from the specified file.
-     *
      * @throws IOException if an I/O error occurs while accessing the file.
      */
     public LoadingService() throws IOException {
@@ -56,14 +54,13 @@ public class LoadingService extends Service {
         scanner = new Scanner(Files.newBufferedReader(filePath));
         startService();
     }
-
     /**
      * Executes the loading service by reading tasks from a storage file and adding them to the {@link CheckList}.
      * <p>
-     * This method reads each line from the file, parses it into a {@link Task} object,
+     * This method reads each line from the storage file, parses it into a {@link Task} object,
      * and adds it to the {@link CheckList}.
      * If the checklist is empty after loading, it notifies the user.
-     *
+     * @return A message indicating the result of the loading operation.
      * @throws IOException if an I/O error occurs while reading the file.
      */
     @Override
@@ -75,34 +72,30 @@ public class LoadingService extends Service {
                 checklist.addTask(parseLineToTask(line));
             }
         }
-
         if (checklist == null || checklist.isEmpty()) {
             return "There are no tasks in your checklist.";
         } else {
             return "Tasks have been loaded successfully\n" + "type 'list' to view your tasks.";
         }
     }
-
-
     /**
      * Starts the loading service.
-     *
+     * @return A message indicating that the loading service has started.
      * @throws IOException if an I/O error occurs during service startup.
      */
     @Override
     public String startService() {
         return "Loading tasks from file...";
     }
-
     /**
      * Ends the loading service by closing the scanner resource.
+     * @return A message indicating that the loading service has ended.
      */
     @Override
     public String endService() {
         scanner.close();
         return "Loading service ended.";
     }
-
     /**
      * Parses a {@link String} line from the file and converts it into a corresponding Task object.
      *
@@ -122,7 +115,6 @@ public class LoadingService extends Service {
             throw new IllegalArgumentException("Invalid task type: " + taskType);
         }
     }
-
     /**
      * Creates an EventTask from a given line.
      * @param line  the {@code String} from the file representing an EventTask.
@@ -141,7 +133,6 @@ public class LoadingService extends Service {
         }
         return output;
     }
-
     /**
      * Creates a ToDosTask from a given line.
      * @param line  the {@code String} from the file representing a ToDosTask.
@@ -157,7 +148,6 @@ public class LoadingService extends Service {
         }
         return output;
     }
-
     /**
      * Creates a DeadlineTask from a given line.
      * @param line  the {@code String} from the file representing a DeadlineTask.
@@ -168,13 +158,13 @@ public class LoadingService extends Service {
         String description = parts[0].substring(7);
         String endDate = formatDate(parts[1]);
         boolean isCompleted = checkCompletedTask(parts[0].substring(3));
-        DeadlineTask output = new DeadlineTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
+        DeadlineTask output = new DeadlineTask(description,
+                DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
         if (isCompleted) {
             output.setCompleted();
         }
         return output;
     }
-
     /**
      * Checks if a task is completed based on its status string.
      * @param status    the symbol {@link String} of the task (e.g., "[X]" for completed, "[ ]" for not completed).
@@ -183,7 +173,6 @@ public class LoadingService extends Service {
     private boolean checkCompletedTask(String status) {
         return status.equals("[X]");
     }
-
     /**
      * Formats a date string by removing parentheses.
      * @param date  the {@code String} representing a date with parentheses.
@@ -192,7 +181,6 @@ public class LoadingService extends Service {
     private String formatDate(String date) {
         return date.replaceAll("[()]", "");
     }
-
     /**
      * Gets the checklist containing the loaded tasks.
      *

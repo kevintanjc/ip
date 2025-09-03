@@ -42,6 +42,9 @@ public abstract class BotConstants {
 
     public static final String FILE_PATH = "src/data/checklist.txt";
 
+    /**
+     * Enum representing task completion status symbols.
+     */
     public enum Symbol {
         COMPLETED("[X]"),
         INCOMPLETE("[ ]");
