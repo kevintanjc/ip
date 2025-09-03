@@ -23,19 +23,20 @@ public class MainWindow extends AnchorPane {
     private BotService botService;
 
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/bart.png"));
-    private final Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/robot.png"));
+    private final Image robotImage = new Image(this.getClass().getResourceAsStream("/images/robot.png"));
 
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        scrollPane.getStyleClass().add("main-window");
     }
 
     public void setBotService(BotService s) {
         botService = s;
         String greeting = s.startService();
-        dialogContainer.getChildren().add(
-                DialogBox.getDukeDialog(greeting, dukeImage)
-        );
+        DialogBox openingBox = DialogBox.getBotDialog(greeting, robotImage);
+        openingBox.getStyleClass().add("bot-dialog");
+        dialogContainer.getChildren().add(openingBox);
     }
 
     /**
@@ -46,10 +47,11 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String input = userInput.getText();
         String response = botService.executeService(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
-        );
+        DialogBox userBox = DialogBox.getUserDialog(input, userImage);
+        DialogBox botBox = DialogBox.getBotDialog(response, robotImage);
+        userBox.getStyleClass().add("user-dialog");
+        botBox.getStyleClass().add("bot-dialog");
+        dialogContainer.getChildren().addAll(userBox, botBox);
         userInput.clear();
     }
 }

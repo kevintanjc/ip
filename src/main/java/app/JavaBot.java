@@ -1,6 +1,7 @@
 package app;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,9 @@ public class JavaBot extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(JavaBot.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(
+                            JavaBot.class.getResource("/styles/styles.css")).toExternalForm());
             stage.setScene(scene);
             fxmlLoader.<MainWindow>getController().setBotService(botService);
             stage.show();
