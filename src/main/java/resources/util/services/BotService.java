@@ -37,20 +37,29 @@ public class BotService extends Service {
      * The method reads user input, processes commands such as adding tasks, marking tasks as completed,
      * unmarking tasks, deleting tasks, and listing all tasks. The loop continues until the user inputs
      * the exit command.
-     * @param input the user input command.
+     * @param inputs the user input command.
      * @return A response message based on the executed command.
      * @throws IllegalStateException    if an invalid task type is provided.
      * @throws NullPointerException     if task creation fails due to null values.
      * @throws IndexOutOfBoundsException if an invalid task index is provided for marking or unmarking.
      */
     @Override
-    public String executeService(String input) {
+    public String executeService(String... inputs) {
+        String input = inputs[0];
         String command = input.split(" ")[0];
         int taskType = getTask(input.split(" ")[0]);
         String output = "";
 
         if (command.equals(EXIT_COMMAND)) {
-            output = endService();
+            try {
+                output = endService();
+                SavingService save = new SavingService(checkList);
+                save.startService();
+                save.executeService();
+                save.endService();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else if (command.equals(LIST_COMMAND)) {
             output = checkList.displayTasks();
         } else if (input.length() >= 6 && command.equals(MARK_COMMAND)) {
@@ -215,7 +224,7 @@ public class BotService extends Service {
         try {
             LoadingService load = new LoadingService();
             load.startService();
-            load.executeService("");
+            load.executeService();
             load.endService();
             this.checkList = load.getChecklist();
             return "Hello! I'm JavaBot\n" + "What can I do for you?";

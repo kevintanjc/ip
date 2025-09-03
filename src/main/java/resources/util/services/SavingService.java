@@ -49,7 +49,7 @@ public class SavingService extends Service {
      * @throws IOException if an I/O error occurs while writing to the file.
      */
     @Override
-    public String executeService(String input) throws IOException {
+    public String executeService(String... input) throws IOException {
         Path path = Paths.get(filePath);
 
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE,
