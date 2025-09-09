@@ -3,6 +3,7 @@ package resources.util.datastorage;
 import static resources.util.constants.BotConstants.INDENT;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import resources.util.tasks.Task;
@@ -28,6 +29,7 @@ public class CheckList {
      */
     public String addTask(Task task) {
         checkList.add(task);
+        checkList.sort(Comparator.comparing(Task::getDescription));
         return INDENT + "Thanks for letting me know! I have added:\n" + INDENT + task;
     }
     /**
