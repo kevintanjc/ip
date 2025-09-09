@@ -50,6 +50,8 @@ public class SavingService extends Service {
      */
     @Override
     public String executeService(String... input) throws IOException {
+        assert checkList.getSize() >= 0 : "CheckList size must be non-negative";
+        assert filePath != null && !filePath.isEmpty() : "File path must not be null or empty";
         Path path = Paths.get(filePath);
 
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE,
