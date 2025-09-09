@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import resources.util.datastorage.CheckList;
@@ -126,8 +127,9 @@ public class LoadingService extends Service {
         String startDate = parts[1];
         String endDate = formatDate(parts[2]);
         boolean isCompleted = checkCompletedTask(parts[0].substring(3));
-        EventTask output = new EventTask(description, DateTimeUtil.convertFormattedStringDateToLocalDate(startDate),
-                DateTimeUtil.convertFormattedStringDateToLocalDate(endDate));
+        LocalDateTime formattedStartDate = DateTimeUtil.convertFormattedStringDateToLocalDate(startDate);
+        LocalDateTime formattedEndDate = DateTimeUtil.convertFormattedStringDateToLocalDate(endDate);
+        EventTask output = new EventTask(description, formattedStartDate, formattedEndDate);
         if (isCompleted) {
             output.setCompleted();
         }
