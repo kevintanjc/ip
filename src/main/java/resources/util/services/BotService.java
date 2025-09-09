@@ -170,15 +170,9 @@ public class BotService extends Service {
         if (parts.length == 0) {
             throw new IllegalStateException("Deadline task description cannot be empty!");
         } else if (parts.length == 1) {
-            DeadlineTask task = new DeadlineTask(parts[0], null);
-            System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                    + INDENT + task);
-            return task;
+            return new DeadlineTask(parts[0], null);
         } else if (parts.length == 2) {
-            DeadlineTask task = new DeadlineTask(parts[0], DateTimeUtil.convertStringToLocalDate(parts[1]));
-            System.out.println(INDENT + "Thanks for letting me know! I have added:\n"
-                    + INDENT + task);
-            return task;
+            return new DeadlineTask(parts[0], DateTimeUtil.convertStringToLocalDate(parts[1]));
         } else {
             throw new IllegalStateException("Invalid format for Deadline task!"
                     + "Use 'deadline <description> /by <date>'.");
