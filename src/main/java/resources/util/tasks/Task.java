@@ -11,7 +11,7 @@ import resources.util.constants.BotConstants;
  */
 public class Task {
     private String description;
-    private boolean completed;
+    private boolean isCompleted;
     /**
      * Constructs a Task with the specified description.
      * The task is initially marked as not completed.
@@ -20,7 +20,7 @@ public class Task {
      */
     public Task(String description) {
         this.description = description;
-        this.completed = false;
+        this.isCompleted = false;
     }
     /**
      * Gets the description of this task.
@@ -34,14 +34,14 @@ public class Task {
      * @return {@code boolean} — true if the task is completed, false otherwise.
      */
     public boolean isCompleted() {
-        return completed;
+        return isCompleted;
     }
     /**
      * Toggles the completion status of the task.
      * If the task is completed, it will be marked as incomplete, and vice versa.
      */
     public void setCompleted() {
-        completed = !completed;
+        isCompleted = !isCompleted;
     }
     /**
      * Returns a String representation of the task which includes its description and completion as a symbol.
@@ -54,7 +54,7 @@ public class Task {
      */
     @Override
     public String toString() {
-        String symbol = completed
+        String symbol = isCompleted
                 ? BotConstants.Symbol.COMPLETED.toString()
                 : BotConstants.Symbol.INCOMPLETE.toString();
         return String.format("%s %s", symbol, description);
