@@ -3,7 +3,8 @@
 > “Your mind is for having ideas, not holding them.” – David Allen  
 > (from *Getting Things Done*)
 
-JavaBot is a **task manager** written in Java. It helps you manage your tasks efficiently with a mix of command-line and JavaFX UI support. Built with Gradle, tested with JUnit 5 + Mockito, and packaged neatly with the Shadow plugin.
+JavaBot is a **task manager** written in Java. It helps you manage your tasks efficiently with a mix of command-line
+and JavaFX UI support. Built with Gradle, tested with JUnit 5 + Mockito, and packaged neatly with the Shadow plugin.
 
 ---
 
