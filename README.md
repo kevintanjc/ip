@@ -64,3 +64,12 @@ java -jar build/libs/javabot.jar
 ```
 
 Want to know where I learnt to style? Look into [JavaFX CSS Reference](https://github.com/se-edu/javafx-tutorial)
+
+### Use of AI-assisted work
+This project has been developed with the assistance of GitHub Copilot to enhance productivity and code quality.
+All code generated or suggested by these AI tools has been reviewed and modified as necessary to ensure it meets 
+the project's standards and requirements.
+ 
+Usage of Copilot for areas in: 
+- javadocs
+- resolving unfamiliar syntax issues
