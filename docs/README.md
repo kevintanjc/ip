@@ -1,4 +1,4 @@
-# User Guide
+# JavaBot User Guide
 
 This document provides comprehensive information on how to use JavaBot effectively. Whether you're a beginner or
 an experienced user, you'll find valuable insights and instructions here.
