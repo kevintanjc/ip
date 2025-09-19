@@ -1,16 +1,18 @@
 package resource.util.datastorage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import resources.util.datastorage.CheckList;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
 import resources.util.tasks.ToDosTask;
-
-import java.time.LocalDateTime;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CheckListTest {
 
