@@ -1,36 +1,32 @@
 package resource.util.datastorage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import resources.util.datastorage.CheckList;
 import resources.util.tasks.DeadlineTask;
 import resources.util.tasks.EventTask;
 import resources.util.tasks.ToDosTask;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-
 class CheckListTest {
 
-    @Mock
     private DeadlineTask deadlineTask;
-
-    @Mock
     private ToDosTask toDosTask;
-
-    @Mock
     private EventTask eventTask;
-
     private CheckList checkListTest;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         checkListTest = new CheckList();
+        deadlineTask = new DeadlineTask("Submit assignment", LocalDateTime.now());
+        toDosTask = new ToDosTask("Buy groceries");
+        eventTask = new EventTask("Team meeting", LocalDateTime.now(), LocalDateTime.now().plusHours(1));
     }
 
     @Test
@@ -62,13 +58,11 @@ class CheckListTest {
         checkListTest.addTask(toDosTask);
         checkListTest.addTask(eventTask);
 
-        when(deadlineTask.getDescription()).thenReturn("Submit assignment");
-        when(toDosTask.getDescription()).thenReturn("Buy groceries");
 
-        assertEquals(deadlineTask, checkListTest.getTaskByIndex(0));
-        assertEquals(toDosTask, checkListTest.getTaskByIndex(1));
-        assertEquals("Submit assignment", checkListTest.getTaskByIndex(0).getDescription());
-        assertEquals("Buy groceries", checkListTest.getTaskByIndex(1).getDescription());
+        assertEquals(deadlineTask, checkListTest.getTaskByIndex(1));
+        assertEquals(toDosTask, checkListTest.getTaskByIndex(0));
+        assertEquals("Submit assignment", checkListTest.getTaskByIndex(1).getDescription());
+        assertEquals("Buy groceries", checkListTest.getTaskByIndex(0).getDescription());
     }
 
     @Test
@@ -77,14 +71,10 @@ class CheckListTest {
         checkListTest.addTask(toDosTask);
         checkListTest.addTask(eventTask);
 
-        when(deadlineTask.isCompleted()).thenReturn(false);
-        when(toDosTask.isCompleted()).thenReturn(false);
-        when(eventTask.isCompleted()).thenReturn(true);
-
         checkListTest.markTask(0);
-        assertFalse(checkListTest.getTaskByIndex(0).isCompleted());
+        assertTrue(checkListTest.getTaskByIndex(0).isCompleted());
         checkListTest.markTask(1);
-        assertFalse(checkListTest.getTaskByIndex(1).isCompleted());
+        assertTrue(checkListTest.getTaskByIndex(1).isCompleted());
         checkListTest.markTask(2);
         assertTrue(checkListTest.getTaskByIndex(2).isCompleted());
     }
@@ -95,15 +85,11 @@ class CheckListTest {
         checkListTest.addTask(toDosTask);
         checkListTest.addTask(eventTask);
 
-        when(deadlineTask.isCompleted()).thenReturn(true);
-        when(toDosTask.isCompleted()).thenReturn(true);
-        when(eventTask.isCompleted()).thenReturn(false);
-
         checkListTest.unmarkTask(0);
-        assertTrue(checkListTest.getTaskByIndex(0).isCompleted());
+        assertFalse(checkListTest.getTaskByIndex(0).isCompleted());
         checkListTest.unmarkTask(1);
-        assertTrue(checkListTest.getTaskByIndex(1).isCompleted());
-        checkListTest.unmarkTask(2);
-        assertFalse(checkListTest.getTaskByIndex(2).isCompleted());
+        assertFalse(checkListTest.getTaskByIndex(1).isCompleted());
+        checkListTest.markTask(2);
+        assertTrue(checkListTest.getTaskByIndex(2).isCompleted());
     }
 }

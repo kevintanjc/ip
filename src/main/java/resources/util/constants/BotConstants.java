@@ -40,7 +40,7 @@ public abstract class BotConstants {
 
     public static final String NO_DATE_GIVEN = "I DUNNO >.<";
 
-    public static final String FILE_PATH = "src/data/checklist.txt";
+    public static final String FILE_PATH = "data/checklist.txt";
 
     /**
      * Enum representing task completion status symbols.

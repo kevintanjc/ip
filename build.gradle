@@ -46,11 +46,12 @@ test {
 }
 
 application {
-    mainClass.set("Launcher")
+    mainClass.set("app.Launcher")
 }
 
 shadowJar {
-    archiveBaseName = "javabot"
+    archiveBaseName = "JavaBot"
+    archiveFileName = 'JavaBot.jar'
     archiveClassifier = null
 }
 

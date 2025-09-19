@@ -50,6 +50,7 @@ public class LoadingService extends Service {
     public LoadingService() throws IOException {
         Path filePath = Paths.get(FILE_PATH);
         if (!Files.exists(filePath)) {
+            Files.createDirectories(filePath.getParent());
             Files.createFile(filePath);
         }
         scanner = new Scanner(Files.newBufferedReader(filePath));
