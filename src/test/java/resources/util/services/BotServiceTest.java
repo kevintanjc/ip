@@ -51,9 +51,7 @@ class BotServiceTest {
     }
 
     @Test
-    void todoCommand_addsTask_sucess() throws IOException {
-        setInput("todo read book\nbye\n");
-
+    void todoCommand_addsTask_success() throws IOException {
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -62,7 +60,9 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("todo read book");
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
             verify(mockCheckList).addTask(captor.capture());
@@ -75,8 +75,6 @@ class BotServiceTest {
 
     @Test
     void deadlineCommand_WithEndDate_success() throws IOException {
-        setInput("deadline submit report /by 01/01/2025 1600\nbye\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -85,7 +83,10 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("deadline submit report /by 01/01/2025 1600");
+
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
             verify(mockCheckList).addTask(captor.capture());
@@ -100,8 +101,6 @@ class BotServiceTest {
 
     @Test
     void deadlineCommand_WithoutEndDate_success() throws IOException {
-        setInput("deadline submit report\nbye\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -110,7 +109,9 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class);) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("deadline submit report");
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
             verify(mockCheckList).addTask(captor.capture());
@@ -124,8 +125,6 @@ class BotServiceTest {
 
     @Test
     void eventCommand_WithStartAndEndDates_success() throws IOException {
-        setInput("event daily stand up /from 02/01/2025 1000 /to 02/01/2025 1200\nbye\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -134,7 +133,9 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class);) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("event daily stand up /from 02/01/2025 1000 /to 02/01/2025 1200");
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
             verify(mockCheckList).addTask(captor.capture());
@@ -149,8 +150,6 @@ class BotServiceTest {
 
     @Test
     void eventCommand_WithoutStartAndEndDates_success() throws IOException {
-        setInput("event daily stand up\nbye\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -159,7 +158,9 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class);) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("event daily stand up");
 
             ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
             verify(mockCheckList).addTask(captor.capture());
@@ -174,8 +175,6 @@ class BotServiceTest {
 
     @Test
     void deleteCommand_RemoveIndexZero_success() throws IOException {
-        setInput("delete 1\nbye\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -184,7 +183,9 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("delete 1");
 
             verify(mockCheckList).removeTaskByIndex(0);
         }
@@ -192,8 +193,6 @@ class BotServiceTest {
 
     @Test
     void markAndUnmark_callChecklistWithParsedIndex() throws IOException {
-        setInput("todo code\ntodo sleep\nmark 2\nunmark 2\nbye\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -202,7 +201,12 @@ class BotServiceTest {
              MockedConstruction<SavingService> mockedSave =
                      mockConstruction(SavingService.class)) {
 
-            new BotService();
+            BotService svc = new BotService();
+            svc.startService();
+            svc.executeService("todo code");
+            svc.executeService("todo sleep");
+            svc.executeService("mark 2");
+            svc.executeService("unmark 2");
 
             verify(mockCheckList).markTask(1);
             verify(mockCheckList).unmarkTask(1);
@@ -211,8 +215,6 @@ class BotServiceTest {
 
     @Test
     void invalidCommand_throwsIllegalState_failure() {
-        setInput("nonsense whatever\n");
-
         CheckList mockCheckList = mock(CheckList.class);
 
         try (MockedConstruction<LoadingService> mockedLoad =
@@ -222,6 +224,10 @@ class BotServiceTest {
 
             try {
                 new BotService();
+                BotService svc = new BotService();
+                svc.startService();
+                svc.executeService("nonsense whatever");
+
             } catch (Exception e) {
                 // insertTaskIntoChecklist throws IllegalStateException for unknown task types
                 assertEquals(IllegalStateException.class, e.getClass());
